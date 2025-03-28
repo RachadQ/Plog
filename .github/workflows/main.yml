@@ -1,0 +1,30 @@
+name: Deploy Frontend to Azure
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Build and push Docker image
+        run: |
+          az acr login --name mycontainerregistry
+          docker build -t plogfront.azurecr.io/plog:latest .
+          docker push plogfront.azurecr.io/plog:latest
+
+      - name: Deploy to Azure Web App
+        run: |
+          az webapp config container set --name plog \
+            --resource-group Plog \
+            --docker-custom-image-name plogfront.azurecr.io/plog:latest
