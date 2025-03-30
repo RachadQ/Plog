@@ -1,5 +1,9 @@
 name: Azure Static Web Apps CI/CD
 
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
 
 on:
   push:
