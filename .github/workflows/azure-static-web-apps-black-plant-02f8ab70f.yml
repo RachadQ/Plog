@@ -25,8 +25,13 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Debug - List Files
-        run: ls -R
+      - name: Install dependencies
+        run: npm install
+        working-directory: my-app
+
+      - name: Build the project
+        run: npm run build
+        working-directory: my-app
           
       - name: Build And Deploy
         id: builddeploy
