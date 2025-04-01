@@ -28,25 +28,13 @@ jobs:
       - name: Install dependencies
         run: npm install
         working-directory: my-app
-      
-      - name: Debug File Structure
-        run: ls -R src
-
-      - name: Check for App.tsx
-        run: |
-          if [ ! -f src/App.tsx ]; then
-            echo "Error: App.tsx not found!"
-            exit 1
-          fi
 
       - name: List directory contents
         run: ls -R my-app/
 
       - name: Build the project
         run: npm run build
-        working-directory: /my-app
-       
-          
+         
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
