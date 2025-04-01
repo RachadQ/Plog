@@ -29,6 +29,13 @@ jobs:
         run: npm install
         working-directory: my-app
 
+      - name: Check for App.tsx
+        run: |
+          if [ ! -f src/App.tsx ]; then
+            echo "Error: App.tsx not found!"
+            exit 1
+          fi
+
       - name: List directory contents
         run: ls -R my-app/
 
