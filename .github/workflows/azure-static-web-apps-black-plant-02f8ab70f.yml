@@ -24,14 +24,26 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-
+     
+      - name: Find Project Directory
+        id: find_directory
+        run: |
+          if [ -f "package.json" ]; then 
+            echo "WORKDIR=$(pwd)" >> $GITHUB_ENV
+          elif [ -d "my-app" ] && [ -f "my-app/package.json" ]; then
+            echo "WORKDIR=$(pwd)/my-app" >> $GITHUB_ENV
+          else
+            echo "No valid React project found!" && exit 1
+          fi
+          
       - name: Install dependencies
         run: npm install
-        working-directory: my-app
+        working-directory: ${{ env.WORKDIR }}
 
       - name: Build the project
         run: npm run build
-
+        working-directory: ${{ env.WORKDIR }}
+        
       - name: Show npm Debug Log on Failure
         if: failure()
         run: cat /home/runner/.npm/_logs/* || true
@@ -45,9 +57,9 @@ jobs:
           action: "upload"
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "." # App source code path
+          app_location: ${{ env.WORKDIR }} # App source code path
           api_location: "" # Api source code path - optional
-          output_location: "my-app/build" # Built app content directory - optional
+          output_location: "${{ env.WORKDIR }}/build" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
