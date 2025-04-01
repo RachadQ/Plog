@@ -29,9 +29,12 @@ jobs:
         run: npm install
         working-directory: my-app
 
+      - name: List directory contents
+        run: ls -R my-app/
+
       - name: Build the project
         run: npm run build
-        working-directory: my-app/
+        working-directory: my-app
           
       - name: Build And Deploy
         id: builddeploy
