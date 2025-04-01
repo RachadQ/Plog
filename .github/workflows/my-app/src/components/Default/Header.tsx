@@ -2,7 +2,8 @@ import React , { useState, useEffect ,useCallback} from "react";
 import HeaderProps from "../../types/Header.interface"
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';  // Import the js-cookie library
-import { FaChevronDown, FaSearch } from "react-icons/fa"; // Import dropdown icon
+import { FaChevronDown} from "react-icons/fa6"; // Import dropdown icon
+import {  FaSearch } from "react-icons/fa";
 import { useAuth } from "./AuthProvider";
 import axios from "axios";
 import { SearchIcon } from "lucide-react"
