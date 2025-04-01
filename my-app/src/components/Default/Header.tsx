@@ -101,7 +101,17 @@ return (
             />
             <div className="flex items-center gap-1">
               <span>Me</span>
-              <FaChevronDown className="text-sm" />
+              
+              <svg
+                className="text-sm"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 320 512"
+                fill="currentColor"
+                width="16"
+                height="16"
+              >
+                <path d="M160 384c-8.2 0-16.4-3.1-22.6-9.4L9.4 246.6C-3.1 234.1-3.1 213.9 9.4 201.4s32.8-12.5 45.3 0L160 306.7l105.4-105.4c12.5-12.5 32.8-12.5 45.3 0s12.5 32.8 0 45.3L182.6 374.6c-6.2 6.3-14.4 9.4-22.6 9.4z" />
+              </svg>
             </div>
           </button>
         ) : (
