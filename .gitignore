@@ -25,11 +25,9 @@ yarn-error.log*
 
 # Ignore TypeScript build output
 /dist/
-/build/
 
-# Ignore TypeScript configuration files
-tsconfig.json
-tsconfig.tsbuildinfo
+
+
 .env
 
 # Ignore all files named 'manifest' with any extension
