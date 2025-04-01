@@ -19,6 +19,7 @@ jobs:
         with:
           submodules: true
           lfs: false
+          fetch-depth: 0
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
@@ -40,8 +41,25 @@ jobs:
         run: npm install
         working-directory: ${{ env.WORKDIR }}
 
+        # 🛠 Step 4: Clean and Install Dependencies
+      - name: Clean and Install Dependencies
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install
+        working-directory: ${{ env.WORKDIR }}
+
+        # 🛠 Step 5: Check for Config Issues
+      - name: Check tsconfig and Babel Config
+        run: |
+          echo "Checking for tsconfig.json and .babelrc..."
+          ls -la tsconfig.json || echo "⚠️ tsconfig.json not found!"
+          ls -la .babelrc || echo "⚠️ .babelrc not found!"
+        working-directory: ${{ env.WORKDIR }}
+
       - name: Build the project
-        run: npm run build
+        run: |
+          echo "Current directory: $(pwd)"
+          ls -R
         working-directory: ${{ env.WORKDIR }}
         
       - name: Show npm Debug Log on Failure
