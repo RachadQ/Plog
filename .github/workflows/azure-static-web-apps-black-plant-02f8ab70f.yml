@@ -29,11 +29,12 @@ jobs:
         run: npm install
         working-directory: my-app
 
-      - name: List directory contents
-        run: ls -R my-app/
-
       - name: Build the project
         run: npm run build
+
+      - name: Show npm Debug Log on Failure
+        if: failure()
+        run: cat /home/runner/.npm/_logs/* || true
          
       - name: Build And Deploy
         id: builddeploy
