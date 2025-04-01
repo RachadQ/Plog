@@ -31,7 +31,7 @@ jobs:
 
       - name: Build the project
         run: npm run build
-        working-directory: my-app
+        working-directory: .
           
       - name: Build And Deploy
         id: builddeploy
