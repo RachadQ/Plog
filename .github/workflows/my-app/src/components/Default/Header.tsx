@@ -10,6 +10,10 @@ import { SearchIcon } from "lucide-react"
 import SearchResults from "./SearchResult";
 
 
+const Icon = FaChevronDown as (props: React.ComponentProps<"svg">) => JSX.Element;
+
+
+
 interface HeaderPs {
 
   onSearch: (query: string) => void
@@ -102,7 +106,7 @@ return (
             />
             <div className="flex items-center gap-1">
               <span>Me</span>
-              <FaChevronDown className="text-sm" />
+              <Icon className="text-sm"  />
             </div>
           </button>
         ) : (
