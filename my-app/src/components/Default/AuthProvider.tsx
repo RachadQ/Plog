@@ -19,8 +19,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loginUserUserId, setLoginUserId] = useState<string | null>(null);
   const [username,setUsername] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [apiUrl, setApiUrl] = useState<string>("");
+
   const navigate = useNavigate();
 
+  
+  // Set the API URL from environment variables when the component mounts
+  useEffect(() => {
+    setApiUrl(process.env.REACT_APP_API_URL || 'http://localhost:3001');  // Default to localhost if not set
+    console.log(apiUrl);
+  }, []);
   
    // Memoized function to get the auth token from cookies
    const getAuthToken = useCallback(() => {
@@ -60,7 +68,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
 
     try {
-      const response = await axios.post('http://localhost:3001/refresh-token', {
+      const response = await axios.post(`${apiUrl}/refresh-token`, {
         refreshToken
       }, {
         withCredentials: true,
@@ -87,7 +95,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (email: string, password: string) => {
     try {
       // Make the POST request to the server's /login route
-      const response = await axios.post('http://localhost:3001/login', {
+      const response = await axios.post(`${apiUrl}/login`, {
         email,
         password,
       }, {
@@ -140,7 +148,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       login,
       logout,
       error,
-      
+      apiUrl, // Provide apiUrl in context if needed in other components
       }}>
       {children} {/* Ensure this exists and is properly passed */}
     </AuthContext.Provider>

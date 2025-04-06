@@ -14,7 +14,7 @@ const UserProfile: React.FC = () => {
   const { username } = useParams<{ username: string }>();
   const [profile, setProfile] = useState<ProfileWithEntriesResponse | null>(null);
   
-  const { authToken,login, username: loggedInUsername ,loginUserUserId,error } = useAuth();
+  const { authToken,login, username: loggedInUsername ,loginUserUserId,error, apiUrl} = useAuth();
  
   const [entries, setEntries] = useState<JournalEntryProp[]>([]);
   const [loading, setLoading] = useState(false);
@@ -35,7 +35,7 @@ const UserProfile: React.FC = () => {
 
       // Fetch Profile and Journal Entries
       const response = await axios.get<ProfileWithEntriesResponse>(
-        `https://plog-api-proxy-function.azurewebsites.net/api/proxyFunction`,
+        `${apiUrl}/user/${username}`,
         { 
         
            params: { endpoint:`/user/${username}`,
@@ -70,7 +70,7 @@ const UserProfile: React.FC = () => {
   const fetchAllTags = useCallback(async () => {
     try {
       
-      const tagResponse = await axios.get(`http://localhost:3001/get/${username}/tags`);
+      const tagResponse = await axios.get(`${apiUrl}/get/${username}/tags`);
       
       setTags(tagResponse.data.map((tag: { name: string }) => tag.name));
       console.log(JSON.stringify(tagResponse));

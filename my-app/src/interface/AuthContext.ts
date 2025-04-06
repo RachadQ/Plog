@@ -11,4 +11,6 @@ export interface AuthContextType {
     login: (email: string, password: string) => Promise<void>;
     logout: () => void;
     error: string | null;
+    apiUrl: string | null;
+  
   }
