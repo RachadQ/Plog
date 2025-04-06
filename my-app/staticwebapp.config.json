@@ -1,8 +1,9 @@
 {
     "routes": [
       {
-        "route": "/api/",
-        "rewrite": "https://plog-backend-api-management.azure-api.net/api/"
+        "route": "/*",
+        "serve": "/index.html",
+        "statusCode": 200
       }
     ]
   }
