@@ -35,8 +35,13 @@ const UserProfile: React.FC = () => {
 
       // Fetch Profile and Journal Entries
       const response = await axios.get<ProfileWithEntriesResponse>(
-        `http://localhost:3001/user/${username}`,
-        {  params: { page, limit: 5 } }
+        `https://plog-api-proxy-function.azurewebsites.net/api/proxyFunction`,
+        { 
+        
+           params: { endpoint:`/user/${username}`,
+            page, limit: 5 } 
+          
+        }
       );
 
       setProfile(response.data);
