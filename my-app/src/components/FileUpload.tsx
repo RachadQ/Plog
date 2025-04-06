@@ -12,7 +12,7 @@ const FileUpload = ({userId,profilePicture}) => {
     const { authToken,loginUserUserId} = useAuth();
     const [isOpen,setIsOpen] = useState(false);
     const [file, setFile] = useState<File | null>(null);
-    console.log("this is the profile image link " + profilePicture);
+    
 
     //Handle file selection via react=dropzone
     const onDrop = (acceptedFiles) => {

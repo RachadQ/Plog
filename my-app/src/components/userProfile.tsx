@@ -33,12 +33,23 @@ const UserProfile: React.FC = () => {
     try {
       
 
-      // Fetch Profile and Journal Entries
+     /* // Fetch Profile and Journal Entries
       const response = await axios.get<ProfileWithEntriesResponse>(
         `${apiUrl}/user/${username}`,
         { 
         
            params: { endpoint:`/user/${username}`,
+            page, limit: 5 } 
+          
+        }
+      );*/
+      
+      // Fetch Profile and Journal Entries
+      const response = await axios.get<ProfileWithEntriesResponse>(
+        `${apiUrl}/user/${username}`,
+        { 
+        
+           params: {
             page, limit: 5 } 
           
         }
@@ -64,7 +75,7 @@ const UserProfile: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [username]);
+  }, [apiUrl,username]);
 
   /** Fetch Tags */
   const fetchAllTags = useCallback(async () => {
@@ -73,17 +84,19 @@ const UserProfile: React.FC = () => {
       const tagResponse = await axios.get(`${apiUrl}/get/${username}/tags`);
       
       setTags(tagResponse.data.map((tag: { name: string }) => tag.name));
-      console.log(JSON.stringify(tagResponse));
+     // console.log(JSON.stringify(tagResponse));
     } catch (err) {
       console.error("Error fetching tags:", err);
     }
-  }, [username]);
+  }, [apiUrl,username]);
 
     /** Fetch Profile & Tags on Mount or Page Change */
     useEffect(() => {
+      if (apiUrl) {
       fetchProfile();
       fetchAllTags();
-    }, [fetchProfile, fetchAllTags]);
+      }
+    }, [apiUrl,fetchProfile, fetchAllTags]);
     //only on mount:  }, [fetchProfile, fetchAllTags]);
     
 
@@ -117,7 +130,7 @@ const UserProfile: React.FC = () => {
         observer.unobserve(loaderRef.current);
       }
     };
-  }, [hasMoreEntries, loading]);
+  }, [hasMoreEntries, loading,apiUrl]);
 
   useEffect(() => {
     if (!entries || !tags) return;
@@ -138,7 +151,7 @@ const UserProfile: React.FC = () => {
         setFilteredEntries(entries); // If no tags selected, show all entries
       }
     }
-  }, [entries,tags ]); 
+  }, [entries,tags,apiUrl ]); 
   if (error) return <div className="p-6 text-red-500">{error}</div>;
   if (!profile) return <div className="p-6">Loading profile...</div>;
 

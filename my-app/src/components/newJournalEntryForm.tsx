@@ -13,7 +13,7 @@ interface NewJournalEntryFormProps {
   const NewJournalEntryForm: React.FC<NewJournalEntryFormProps> = ({ addEntry,IsOwner }) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const { authToken,loginUserUserId} = useAuth();
+    const { authToken,loginUserUserId,apiUrl} = useAuth();
     const [tags, setTags] = useState<TagProp[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [token, setToken] = useState<string | null>(null);
@@ -33,7 +33,7 @@ interface NewJournalEntryFormProps {
         // Refresh the token if it doesn't exist or has expired
         if (!authToken && refreshToken) {
           console.log(storedToken);
-          const tokenResponse = await axios.post('http://localhost:3001/refresh-token', { refreshToken });
+          const tokenResponse = await axios.post(`${apiUrl}/refresh-token`, { refreshToken });
          
           storedToken = tokenResponse.data.accessToken;
           
@@ -45,7 +45,7 @@ interface NewJournalEntryFormProps {
           setToken(storedToken);
   
           // Fetch user information
-          const response = await axios.get('http://localhost:3001/user-info', {
+          const response = await axios.get(`${apiUrl}/user-info`, {
             headers: {
               Authorization: `Bearer ${storedToken}`, // Include token in Authorization header
             },
@@ -90,7 +90,7 @@ interface NewJournalEntryFormProps {
     
         // Create the journal entry with resolved tag IDs
         const response = await axios.post(
-          'http://localhost:3001/entrie',
+          `${apiUrl}/entrie`,
           { title, content, tags: tagNames, userId: userId },
           { headers: { Authorization: `Bearer ${token}` } }
         );

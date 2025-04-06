@@ -19,17 +19,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loginUserUserId, setLoginUserId] = useState<string | null>(null);
   const [username,setUsername] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const [apiUrl, setApiUrl] = useState<string>("");
+  const [apiUrl, setApiUrl] = useState<string>(process.env.REACT_APP_API_URL || 'http://localhost:3001');
 
   const navigate = useNavigate();
 
   
-  // Set the API URL from environment variables when the component mounts
-  useEffect(() => {
-    setApiUrl(process.env.REACT_APP_API_URL || 'http://localhost:3001');  // Default to localhost if not set
-    console.log(apiUrl);
-  }, []);
-  
+
    // Memoized function to get the auth token from cookies
    const getAuthToken = useCallback(() => {
     return Cookies.get("authToken") || null;
@@ -135,7 +130,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
 
 
-  console.log(loginUserUserId + " and" + username)
+  
   return (
     <AuthContext.Provider value={{
       authToken,
