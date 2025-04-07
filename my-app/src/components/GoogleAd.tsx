@@ -1,15 +1,16 @@
 import axios from 'axios';
 import React, { useEffect, useState, useRef } from 'react';
+import { useAuth } from './Default/AuthProvider';
 
 const GoogleAd: React.FC = () => {
   const [adKey, setAdKey] = useState(0); // Ensure re-renders have unique ad keys
   const [adConfig,setAdConfig] = useState({adClient: "", adSlot: ""})
   const adsInitializedRef = useRef(false); // Flag to track if ads have been initialized
-
+  const { authToken,loginUserUserId,apiUrl} = useAuth();
  
   useEffect(() => {
     // Fetch ad client and slot from backend
-    axios.get("http://localhost:3001/api/ads-config")
+    axios.get(`${apiUrl}/api/ads-config`)
     .then((res) => {
       console.log(JSON.stringify(res.data));
       setAdConfig(res.data);
