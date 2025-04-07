@@ -15,10 +15,11 @@ interface HeaderPs {
 }
 
 const Header: React.FC = () => {
-  const { authToken, username, logout } = useAuth();
+  const { authToken, username, logout,apiUrl } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<any[]>([]);
+  
   const navigate = useNavigate();
 
 // Toggle dropdown menu
@@ -38,7 +39,7 @@ const handleSearchChange = async (event: React.ChangeEvent<HTMLInputElement>) =>
 
   try {
     // Send the search request to the backend API
-    const response = await axios.get('http://localhost:3001/search', { params: { query } });
+    const response = await axios.get(`${apiUrl}/search`, { params: { query } });
     setSearchResults(response.data);  // Set the search results
   } catch (error) {
     console.error("Error fetching search results:", error);

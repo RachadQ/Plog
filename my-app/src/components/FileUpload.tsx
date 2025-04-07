@@ -9,7 +9,7 @@ import { useAuth } from "./Default/AuthProvider";
 
 
 const FileUpload = ({userId,profilePicture}) => {
-    const { authToken,loginUserUserId} = useAuth();
+    const { authToken,loginUserUserId,apiUrl} = useAuth();
     const [isOpen,setIsOpen] = useState(false);
     const [file, setFile] = useState<File | null>(null);
     
@@ -37,7 +37,7 @@ const FileUpload = ({userId,profilePicture}) => {
         formData.append('file',file);
 
         try{
-                const response = await axios.post('http://localhost:3001/upload', formData,
+                const response = await axios.post(`${apiUrl}/upload`, formData,
                     {
                         headers:{
                             'Content-Type': 'multipart/form-data',

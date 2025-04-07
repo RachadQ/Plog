@@ -7,10 +7,11 @@ import { useAuth } from './Default/AuthProvider';
 interface NewJournalEntryFormProps {
   addEntry: (newEntry: JournalEntryProp) => void;
   IsOwner: boolean;
+  //refreshProfile: 
 }
 
 
-  const NewJournalEntryForm: React.FC<NewJournalEntryFormProps> = ({ addEntry,IsOwner }) => {
+  const NewJournalEntryForm: React.FC<NewJournalEntryFormProps> = ({ addEntry,IsOwner,/*refreshProfile*/ }) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const { authToken,loginUserUserId,apiUrl} = useAuth();
@@ -29,10 +30,10 @@ interface NewJournalEntryFormProps {
       try {
         let storedToken = Cookies.get('authToken'); // Get the token from cookies
         const refreshToken = Cookies.get('refreshToken');
-        console.log(refreshToken);
+        
         // Refresh the token if it doesn't exist or has expired
         if (!authToken && refreshToken) {
-          console.log(storedToken);
+        
           const tokenResponse = await axios.post(`${apiUrl}/refresh-token`, { refreshToken });
          
           storedToken = tokenResponse.data.accessToken;
@@ -84,10 +85,6 @@ interface NewJournalEntryFormProps {
       try {
         
         const tagNames = tags.map(tag => tag.name); // Extract tag names
-
-    
-        
-    
         // Create the journal entry with resolved tag IDs
         const response = await axios.post(
           `${apiUrl}/entrie`,
@@ -112,6 +109,7 @@ interface NewJournalEntryFormProps {
         setContent('');
         setTags([]);
         setIsOpen(false);
+        
       } catch (error) {
         console.error(error);
 
@@ -160,7 +158,7 @@ interface NewJournalEntryFormProps {
       if (uniqueTags.length > 0) {
         try {
           // Fetch tag suggestions from the server (only valid tags from the database)
-          const response = await axios.get(`http://localhost:3001/tags/search?query=${newQuery}`);
+          const response = await axios.get(`${apiUrl}/tags/search?query=${newQuery}`);
           setTagSuggestions(response.data); // Update suggestions from the backend
         } catch (error) {
           console.error("Error fetching tag suggestions:", error);

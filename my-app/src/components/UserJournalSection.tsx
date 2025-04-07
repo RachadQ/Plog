@@ -31,8 +31,11 @@ const UserJournalSection: React.FC<UserJournalSectionProps> = ({
   allTags,
 }) => {
 
+
+
   const isOwner = authenticatedUserId === profileUserId;
   console.log(" The Name" + userName);
+  
   return (
     <div className="user-journal-section bg-gray-100 p-4 rounded-lg shadow-md">
       {/* Tags Section */}
@@ -54,6 +57,7 @@ const UserJournalSection: React.FC<UserJournalSectionProps> = ({
               ownerName={userName}
               onEdit={editEntry} // Pass edit function
               isOwner={isOwner}
+              
             />
           </div>
         ) : (
