@@ -20,7 +20,7 @@ const GoogleAd: React.FC = () => {
     })
       
     .catch((error) => console.error("Error fetching ad config:", error));
-  }, []);
+  }, [adConfig]);
   
 
   useEffect(() => {
