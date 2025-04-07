@@ -7,23 +7,35 @@ const GoogleAd: React.FC = () => {
   const [adConfig,setAdConfig] = useState({adClient: "", adSlot: ""})
   const adsInitializedRef = useRef(false); // Flag to track if ads have been initialized
   const { authToken,loginUserUserId,apiUrl} = useAuth();
- 
+  const scriptLoadedRef = useRef(false);
+
   useEffect(() => {
     // Fetch ad client and slot from backend
-    axios.get(`${apiUrl}/api/ads-config`)
-    .then((res) => {
-
-      setAdConfig(res.data);
-     
-      console.log("worked");
+    const fetchAdConfig = async () =>
+    {
+      try{
+      const res = await axios.get(`${apiUrl}/api/ads-config`) 
+        const { adClient, adSlot } = res.data;
+        if (adClient && adSlot) {
+          setAdConfig({ adClient, adSlot });
+         
+        } else {
+          console.error("Ad client or slot ID is missing in the fetched data.");
+        }    
       
-    })
+    }catch (error) {
+      console.error("Error fetching ad config:", error);
+    }
+        
       
-    .catch((error) => console.error("Error fetching ad config:", error));
-  }, [apiUrl,adConfig]);
+  };
+  fetchAdConfig();
+  }, [apiUrl]);
   
 
   useEffect(() => {
+
+    if (adConfig.adClient && adConfig.adSlot && !scriptLoadedRef.current) {
     // Function to load Google Ads script
     const loadGoogleAdsScript = () => {
       if (!document.querySelector('script[src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]')) {
@@ -52,14 +64,16 @@ const GoogleAd: React.FC = () => {
       }
     };
 
-    if (adConfig.adClient && adConfig.adSlot) {
+   
       loadGoogleAdsScript();
-    } else {
-      console.error("Ad client or slot ID is missing.");
-    }
+      scriptLoadedRef.current = true;
+  }else if(!adConfig.adClient || !adConfig.adSlot) {
+    console.error("Ad client or slot ID is missing.");
+  }
 
     return () => {
       adsInitializedRef.current = false;
+      scriptLoadedRef.current = false;
     };
   }, [adConfig]);
 
@@ -68,6 +82,7 @@ const GoogleAd: React.FC = () => {
     setAdKey((prevKey) => prevKey + 1);
   };
 
+  
   return (
     <div className="flex items-center justify-center ">
     <div 

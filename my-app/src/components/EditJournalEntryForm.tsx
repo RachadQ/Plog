@@ -33,6 +33,7 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
   const [query, setQuery] = useState('');
   const [tags, setTags] = useState<TagProp[]>(initialValues?.tags || []);
   const [tagSuggestions, setTagSuggestions] = useState<TagProp[]>([]);
+  const {apiUrl} = useAuth();
   console.log("this is " + JSON.stringify(entry, null, 2))
   
   // Synchronize tags with the entry object
@@ -44,7 +45,7 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
   }, [tags, entry.tags]);
   const fetchTagSuggestions = async (query: string) => {
     try {
-      const response = await axios.get(`http://localhost:3001/tags/search?query=${query}`);
+      const response = await axios.get(`${apiUrl}/tags/search?query=${query}`);
       setTagSuggestions(response.data || []);
     } catch (error) {
       console.error('Error fetching tag suggestions:', error);
@@ -88,7 +89,7 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
     // Refresh the token if it doesn't exist
     if (!storedToken && refreshToken) {
     
-      const tokenResponse = await axios.post('http://localhost:3001/refresh-token', { authToken });
+      const tokenResponse = await axios.post(`${apiUrl}/refresh-token`, { authToken });
       storedToken = tokenResponse.data.accessToken;
       console.log("This stored: " + JSON.stringify(storedToken));
       Cookies.set('authToken', storedToken);
@@ -100,7 +101,7 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
       return;
     }
     try {
-      const response = await axios.put(`http://localhost:3001/edit/${entry._id}`, {
+      const response = await axios.put(`${apiUrl}/edit/${entry._id}`, {
         title: entry.title,
         content: entry.content,
         tags: tags.map((tag) => tag.name), // Send only tag names
