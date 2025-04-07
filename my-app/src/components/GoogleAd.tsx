@@ -12,7 +12,7 @@ const GoogleAd: React.FC = () => {
     // Fetch ad client and slot from backend
     axios.get(`${apiUrl}/api/ads-config`)
     .then((res) => {
-      console.log(JSON.stringify(res.data));
+
       setAdConfig(res.data);
      
       console.log("worked");
