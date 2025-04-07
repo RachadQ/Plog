@@ -9,8 +9,7 @@ node_modules/
 # testing
 /coverage
 
-# production
-/build
+
 
 # misc
 .DS_Store
@@ -31,8 +30,8 @@ yarn-error.log*
 .env
 
 # Ignore all files named 'manifest' with any extension
-manifest.*
+
 
 # Ignore specific files named 'manifest' with different extensions
-manifest.json
+
 manifest.xml
