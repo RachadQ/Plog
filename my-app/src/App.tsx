@@ -10,13 +10,11 @@ import EmailVerification from "./components/EmailVerification";
 import ForgotPassword from './components/ForgotPassword';
 import ResetPassword from './components/ResetPassword';
 import BaseLayout from './components/Default/BaseLayout';
+import { useAuth } from './components/Default/AuthProvider';
+import LandingPage from './components/LandingPage/LandingPage';
 function App() {
 
-  const profileData = {
-    name: 'John Doe',
-    title: 'Software Engineer',
-    id: 123,
-  };
+  const { authToken } = useAuth();
   
   return (
     <div className="App">
@@ -24,7 +22,7 @@ function App() {
       <BaseLayout>
         <Routes>
           {/*<UserProfile profile={profileData} />*/}
-          <Route path="/"  element={<HomePage/>} />
+          <Route path="/"  element={authToken ? <HomePage/> : <LandingPage/>} />
           <Route path="/user/:username" element={<UserProfile/>} />
           {/* New route for login page */}
           <Route path="/login" element={<LoginPage />} />
