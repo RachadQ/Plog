@@ -8,8 +8,12 @@ const BaseLayout: React.FC<children> = ({children }) => {
     return (
       <div>
         <Header />
-        <main>{children}</main>
+        {/*kind of iffy of the main look*/ }
+        <main className="min-h-screen bg-white text-gray-800 p-6">{children}
         <Footer />
+        </main>
+
+        
       </div>
     );
   };
