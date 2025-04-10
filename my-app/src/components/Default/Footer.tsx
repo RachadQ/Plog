@@ -6,7 +6,7 @@ const Footer: React.FC<{}>  = () => {
       <div className="container mx-auto text-center">
         {/* Company Name */}
         <p className="text-sm">&copy; {new Date().getFullYear()} Plog. All Rights Reserved.</p>
-
+        © 2025 Plog Social. All rights reserved. | <a href="/privacy-policy" className="text-blue-500 hover:underline">Privacy Policy</a>
         {/* Footer Links */}
         <div className="mt-4">
           <a href="/about" className="text-gray-400 hover:text-white mx-2">
