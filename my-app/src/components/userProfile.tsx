@@ -23,7 +23,8 @@ const UserProfile: React.FC = () => {
   const [page, setPage] = useState(1);
   const [tags, setTags] = useState<string[]>([]);
   const [filteredEntries, setFilteredEntries] = useState<JournalEntryProp[]>(entries);
-  
+  const [initialLoading, setInitialLoading] = useState(true);
+
 
   /** Fetch Profile & Entries */
   const fetchProfile = useCallback(async () => {
@@ -31,18 +32,6 @@ const UserProfile: React.FC = () => {
     
     setLoading(true);
     try {
-      
-
-     /* // Fetch Profile and Journal Entries
-      const response = await axios.get<ProfileWithEntriesResponse>(
-        `${apiUrl}/user/${username}`,
-        { 
-        
-           params: { endpoint:`/user/${username}`,
-            page, limit: 5 } 
-          
-        }
-      );*/
       
       // Fetch Profile and Journal Entries
       const response = await axios.get<ProfileWithEntriesResponse>(
@@ -55,6 +44,7 @@ const UserProfile: React.FC = () => {
         }
       );
 
+      
       setProfile(response.data);
       
       // Append new unique entries
