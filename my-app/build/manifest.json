@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Plog Social",
+  "name": "Plog Social",
   "icons": [
     {
       "src": "favicon.ico",
@@ -17,6 +17,9 @@
       "type": "image/png",
       "sizes": "512x512"
     }
+  ],
+  "permissions": [
+    "storage"
   ],
   "start_url": ".",
   "display": "standalone",
