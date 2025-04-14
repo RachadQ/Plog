@@ -14,6 +14,7 @@ import { useAuth } from './components/Default/AuthProvider';
 import LandingPage from './components/LandingPage/LandingPage';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import About from './components/About';
+import ContactForm from './components/Default/ContactForm';
 function App() {
 
   const { authToken } = useAuth();
@@ -36,7 +37,8 @@ function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="create-account" element={<SignUp/>}/>
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/About" element={<About />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<ContactForm />} />
         </Routes>
         </BaseLayout>
       

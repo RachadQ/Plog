@@ -14,7 +14,7 @@ interface NewJournalEntryFormProps {
   const NewJournalEntryForm: React.FC<NewJournalEntryFormProps> = ({ addEntry,IsOwner,/*refreshProfile*/ }) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const { authToken,loginUserUserId,apiUrl} = useAuth();
+    const { authToken,loginUserUserId,apiUrl,authRefreshToken} = useAuth();
     const [tags, setTags] = useState<TagProp[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [token, setToken] = useState<string | null>(null);
@@ -28,27 +28,13 @@ interface NewJournalEntryFormProps {
     // Function to fetch user information
     const fetchUserInfo = async () => {
       try {
-        let storedToken = Cookies.get('authToken'); // Get the token from cookies
-        const refreshToken = Cookies.get('refreshToken');
-        
-        // Refresh the token if it doesn't exist or has expired
-        if (!authToken && refreshToken) {
-        
-          const tokenResponse = await axios.post(`${apiUrl}/refresh-token`, { refreshToken });
-         
-          storedToken = tokenResponse.data.accessToken;
-          
        
-        }
-  
-        if (storedToken) {
-          // Set the token in state
-          setToken(storedToken);
+        if (authToken) {
   
           // Fetch user information
           const response = await axios.get(`${apiUrl}/user-info`, {
             headers: {
-              Authorization: `Bearer ${storedToken}`, // Include token in Authorization header
+              Authorization: `Bearer ${authToken}`, // Include token in Authorization header
             },
           });
   
