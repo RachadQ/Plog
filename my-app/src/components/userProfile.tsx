@@ -1,9 +1,8 @@
-import React, { useEffect, useState,useRef,useCallback, useContext  } from "react";
+import React, { useEffect, useState,useRef,useCallback } from "react";
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { ProfileWithEntriesResponse } from '../types';
 import JournalEntryProp from "../interface/JournalEntryProp";
-import Cookies from 'js-cookie';  // Import the js-cookie library
 import '../styles/profile.css';
 import UserJournalSection from "./UserJournalSection";
 import { useAuth } from "../components/Default/AuthProvider";
@@ -167,6 +166,8 @@ const UserProfile: React.FC = () => {
   const downloadResume = async () => {
    // const googleDriveLink = "https://drive.google.com/uc?export=download&id=1UsBGAJXyWdA9WQxzJeGj85fsSDKZFEVI";
   //window.location.href = googleDriveLink;
+
+     alert('Integrating a safe privacy protected resume upload, please come back later.');
   };
 
  

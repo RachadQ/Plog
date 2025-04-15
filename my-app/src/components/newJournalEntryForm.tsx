@@ -1,8 +1,7 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import  JournalEntryProp  from '../interface/JournalEntryProp';
 import { TagProp } from '../interface/TagProp';
-import Cookies from 'js-cookie';
 import { useAuth } from './Default/AuthProvider';
 interface NewJournalEntryFormProps {
   addEntry: (newEntry: JournalEntryProp) => void;
@@ -17,7 +16,6 @@ interface NewJournalEntryFormProps {
     const { authToken,loginUserUserId,apiUrl,authRefreshToken} = useAuth();
     const [tags, setTags] = useState<TagProp[]>([]);
     const [isOpen, setIsOpen] = useState(false);
-    const [token, setToken] = useState<string | null>(null);
     const [userId, setUserId] = useState<string | null>(null);
     const [query, setQuery] = useState(""); 
     const [tagSuggestions, setTagSuggestions] = useState<TagProp[]>([]);
@@ -69,7 +67,7 @@ interface NewJournalEntryFormProps {
       e.preventDefault(); // Prevent the default form submission behavior
 
       
-      if (!userId) {
+      if (!loginUserUserId) {
         alert("User ID is required.");
         return;
       }
@@ -81,7 +79,7 @@ interface NewJournalEntryFormProps {
         const response = await axios.post(
           `${apiUrl}/entrie`,
           { title, content, tags: tagNames, userId: userId },
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Bearer ${authToken}` } }
         );
     
         // Add the new entry to the local state (or any state management you use)
@@ -182,7 +180,7 @@ interface NewJournalEntryFormProps {
       <div className="relative flex justify-center items-center min-h-[10vh] bg-gray-100">
         <button
           className="flex items-center bg-white text-gray-500 font-medium py-2 px-4 rounded-full shadow hover:bg-gray-100 transition duration-300 ease-in-out"
-          onClick={() => setIsOpen(true)}
+          onClick={handleOpen}
         >
           <span className="text-left">Start a post</span>
         </button>
