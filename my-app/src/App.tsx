@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import UserProfile from './components/userProfile';
-import { BrowserRouter as Router, Route, Routes  } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes,useLocation  } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import LoginPage from './components/Login'
 import SignUp from './components/SignUp';
@@ -18,7 +18,7 @@ import ContactForm from './components/Default/ContactForm';
 function App() {
 
   const { authToken } = useAuth();
-  
+  const location = useLocation(); 
   return (
     <div className="App">
       
@@ -26,7 +26,7 @@ function App() {
         <Routes>
           {/*<UserProfile profile={profileData} />*/}
           <Route path="/"  element={authToken ? <HomePage/> : <LandingPage/>} />
-          <Route path="/user/:username" element={<UserProfile/>} />
+          <Route path="/user/:username" element={<UserProfile />} />
           {/* New route for login page */}
           <Route path="/login" element={<LoginPage />} />
            {/* New route for SignUp page */}

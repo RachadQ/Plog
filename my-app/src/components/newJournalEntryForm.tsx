@@ -23,7 +23,7 @@ interface NewJournalEntryFormProps {
     const [tagSuggestions, setTagSuggestions] = useState<TagProp[]>([]);
     const [name, SetName] = useState<string | null>(null);
 
-  
+  console.log(`login user id ${loginUserUserId} and set user id ${userId}`);
   useEffect(() => {
     // Function to fetch user information
     const fetchUserInfo = async () => {
@@ -56,8 +56,14 @@ interface NewJournalEntryFormProps {
   
     // Call the function
     fetchUserInfo();
-  }, []);
+  }, [authToken,loginUserUserId,apiUrl]);
   
+    // Automatically show the "Start a post" button once the user is authenticated.
+    useEffect(() => {
+      if (loginUserUserId) {
+        setIsOpen(false); // Open the post form when the user is authenticated and has userId
+      }
+    }, [loginUserUserId]);
     const handleSubmit = async (e: React.FormEvent) => {
      
       e.preventDefault(); // Prevent the default form submission behavior
