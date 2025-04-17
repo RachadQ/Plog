@@ -13,7 +13,7 @@ const UserProfile: React.FC = () => {
   const { username } = useParams<{ username: string }>();
   const [profile, setProfile] = useState<ProfileWithEntriesResponse | null>(null);
   
-  const { authToken,login, username: loggedInUsername ,loginUserUserId,error, apiUrl} = useAuth();
+  const { username: loggedInUsername ,loginUserUserId,error, apiUrl} = useAuth();
  
   const [entries, setEntries] = useState<JournalEntryProp[]>([]);
   const [loading, setLoading] = useState(false);
