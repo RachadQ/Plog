@@ -21,7 +21,7 @@ interface NewJournalEntryFormProps {
     const [tagSuggestions, setTagSuggestions] = useState<TagProp[]>([]);
     const [name, SetName] = useState<string | null>(null);
 
-  console.log(`login user id ${loginUserUserId} and set user id ${userId}`);
+ 
   useEffect(() => {
     // Function to fetch user information
     const fetchUserInfo = async () => {
@@ -78,7 +78,7 @@ interface NewJournalEntryFormProps {
         // Create the journal entry with resolved tag IDs
         const response = await axios.post(
           `${apiUrl}/entrie`,
-          { title, content, tags: tagNames, userId: userId },
+          { title, content, tags: tagNames },
           { headers: { Authorization: `Bearer ${authToken}` } }
         );
     
@@ -88,7 +88,7 @@ interface NewJournalEntryFormProps {
           title,
           content,
           tags: tags.map((tag) => ({ _id: tag._id, name: tag.name } )), // Ensure tags are correctly formatted
-          user: userId as string,
+          user: loginUserUserId as string,
           owerName: name ,
           createdAt: new Date().toISOString(),  // Add createdAt timestamp
           updatedAt: new Date().toISOString(),  // Add updatedAt timestamp
