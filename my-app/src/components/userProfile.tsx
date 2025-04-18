@@ -64,7 +64,7 @@ const UserProfile: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [apiUrl,username]);
+  }, [apiUrl,username,page]);
 
   /** Fetch Tags */
   const fetchAllTags = useCallback(async () => {
@@ -88,7 +88,12 @@ const UserProfile: React.FC = () => {
     }, [apiUrl,fetchProfile, fetchAllTags]);
     //only on mount:  }, [fetchProfile, fetchAllTags]);
     
-
+    // Runs whenever page changes
+useEffect(() => {
+  if (apiUrl && username) {
+    fetchProfile();
+  }
+}, [apiUrl, username, page, fetchProfile]);
   
    
     
