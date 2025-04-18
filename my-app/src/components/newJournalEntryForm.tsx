@@ -84,12 +84,12 @@ interface NewJournalEntryFormProps {
     
         // Add the new entry to the local state (or any state management you use)
         addEntry({
-          _id: response.data._id, // Assuming backend returns the new entry with _id
+          _id: response.data.entry._id, // Assuming backend returns the new entry with _id
           title,
           content,
           tags: tags.map((tag) => ({ _id: tag._id, name: tag.name } )), // Ensure tags are correctly formatted
           user: loginUserUserId as string,
-          owerName: name ,
+          ownerName: name ,
           createdAt: new Date().toISOString(),  // Add createdAt timestamp
           updatedAt: new Date().toISOString(),  // Add updatedAt timestamp
         });

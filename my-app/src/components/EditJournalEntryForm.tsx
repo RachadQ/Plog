@@ -13,7 +13,7 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
     title: initialValues?.title || '',
     content: initialValues?.content || '',
     tags: initialValues?.tags || [],
-    owerName:initialValues?.ownerName|| '',
+    ownerName:initialValues?.ownerName|| '',
     user: initialValues?.user || '', // Ensure user is defined
     createdAt: initialValues?.createdAt || '', // Set createdAt as needed
     updatedAt: initialValues?.updatedAt || '', // Set updatedAt as needed

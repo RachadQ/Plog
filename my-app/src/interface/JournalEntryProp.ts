@@ -6,7 +6,7 @@ export default interface JournalEntryProp {
     title: string;
     content: string;
     user: string;
-    owerName: string | null;
+    ownerName: string | null;
     createdAt: string;
     updatedAt: string;
     tags: TagProp[];
