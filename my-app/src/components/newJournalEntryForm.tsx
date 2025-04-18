@@ -173,10 +173,17 @@ interface NewJournalEntryFormProps {
 
   };
 
+  useEffect(() => {
+    if (loginUserUserId) {
+      // you can fetch user data again or force UI update
+      setIsOpen(false);
+    }
+  }, [loginUserUserId]);
+  
   
   return (
     <>
-    {IsOwner && (
+    {IsOwner && loginUserUserId &&(
       <div className="relative flex justify-center items-center min-h-[10vh] bg-gray-100">
         <button
           className="flex items-center bg-white text-gray-500 font-medium py-2 px-4 rounded-full shadow hover:bg-gray-100 transition duration-300 ease-in-out"

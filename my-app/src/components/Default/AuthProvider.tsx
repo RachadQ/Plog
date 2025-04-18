@@ -119,8 +119,16 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   
-  const logout = () =>{ 
+  const logout = async () =>{ 
     //clear auth and set token and remove cookies
+
+    try{
+      await axios.post(`${apiUrl}/logout`, {}, { withCredentials: true });
+    }
+    catch(err)
+    {
+      console.warn("Logout request failed or not implemented:", err);
+    }
     setAuthToken(null);
     setAuthRefreshToken(null);
     Cookies.remove('authToken');
