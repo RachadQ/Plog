@@ -38,10 +38,6 @@ jobs:
           else
             echo "No valid React project found!" && exit 1
           fi
-          
-      - name: Install dependencies
-        run: npm install
-        working-directory: ${{ env.WORKDIR }}
 
         # 🛠 Step 4: Clean and Install Dependencies
       - name: Clean and Install Dependencies
