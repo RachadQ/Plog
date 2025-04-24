@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+
 import { useNavigate } from 'react-router-dom'; // For redirecting after successful login
-import Cookies from 'js-cookie';
+
 import {useAuth} from "./Default/AuthProvider"
 
 

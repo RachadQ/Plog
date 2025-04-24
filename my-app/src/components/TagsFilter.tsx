@@ -2,7 +2,6 @@
   import React, { useState, useEffect,useCallback,useRef } from "react";
  
   import TagsFilterProps from "../interface/TagFIlterProps";
-import axios from "axios";
 
 
   const TagsFilter: React.FC<TagsFilterProps> = ({ entries, onFilterChange,ProfileUser,allTags }) => {
@@ -54,10 +53,13 @@ import axios from "axios";
     // Handle tag click
     const handleTagClick = useCallback(
       (tag: string) => {
-        setActiveTag(tag);
+      //  setActiveTag(tag);
         handleFilterChange(tag);
       },
-      [handleFilterChange,setActiveTag]
+      [handleFilterChange,
+       // setActiveTag
+      
+      ]
     );
   
 
