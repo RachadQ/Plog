@@ -22,7 +22,7 @@ import EditJournalEntryForm from './EditJournalEntryForm';
 import { useAuth } from './Default/AuthProvider';
 
 const JournalEntry: React.FC<JournalEntryProps> = ({entry,isOwner,ownerName,onDelete,onEdit}) =>{
-   const { authToken,login, username: loggedInUsername ,loginUserUserId,error } = useAuth();
+   const { authToken,login, username: loggedInUsername ,loginUserUserId,error,apiUrl } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [openSolutions, setOpenSolutions] = useState<number[]>([]); // Not currently used, but available for future expansion
   
@@ -36,7 +36,7 @@ const JournalEntry: React.FC<JournalEntryProps> = ({entry,isOwner,ownerName,onDe
     if (confirmDelete ) {
      try {
        // Make the API call to delete the journal entry
-       const response = await axios.delete(`http://localhost:3001/delete/${entryId}`,
+       const response = await axios.delete(`${apiUrl}/delete/${entryId}`,
         {
           headers:{
               Authorization: `Bearer ${authToken}`,
