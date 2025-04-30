@@ -49,6 +49,7 @@ const JournalEntry: React.FC<JournalEntryProps> = ({entry,isOwner,ownerName,onDe
 
        // Call the onDelete function passed via props to update the state
        onDelete(entryId); // Update state in the parent component
+       alert('Post Deleted.');
      } catch (error) {
        console.error('Error deleting the entry:', error);
        alert('Failed to delete the entry.');
