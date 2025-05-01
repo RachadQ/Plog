@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { useAuth } from "../components/Default/AuthProvider";
 import axios from 'axios';
 
 const ResetPassword: React.FC = () => {
@@ -9,7 +10,8 @@ const ResetPassword: React.FC = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const resetToken = searchParams.get('token'); // Extract token from URL
-  
+  const {  loginUserUserId, apiUrl} = useAuth();
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -19,7 +21,7 @@ const ResetPassword: React.FC = () => {
     }
 
     try {
-        const response = await axios.post('http://localhost:3001/reset-password', {
+        const response = await axios.post(`${apiUrl}/reset-password`, {
           token: resetToken,
           newPassword,
         });
