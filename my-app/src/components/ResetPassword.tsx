@@ -10,7 +10,7 @@ const ResetPassword: React.FC = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const resetToken = searchParams.get('token'); // Extract token from URL
-  const {  loginUserUserId, apiUrl} = useAuth();
+  const { apiUrl} = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
