@@ -22,7 +22,7 @@ const FileUpload = ({userId,profilePicture}) => {
     const { getRootProps, getInputProps } = useDropzone({
         onDrop,
         multiple: false,
-        accept: 'image/*' as unknown as Accept,  // Explicitly cast to Accept type
+        accept: {'image/*': []},  // Explicitly cast to Accept type
       });
 
     //function to upload file to the backend server
