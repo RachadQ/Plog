@@ -1,5 +1,10 @@
 {
   "navigationFallback": {
-    "rewrite": "/index.html"
+    "rewrite": "/index.html",
+    "exclude": ["/sitemap.xml", "/robots.txt"]
+  },
+  "mimeTypes": {
+    ".xml": "application/xml",
+    ".txt": "text/plain"
   }
 }
