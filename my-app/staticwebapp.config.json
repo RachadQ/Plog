@@ -1,5 +1,11 @@
 
 {
+  "routes": [
+    {
+      "route": "/sitemap.xml",
+      "rewrite": "https://backend22-e6bqgpcxfqhyfxfh.canadacentral-01.azurewebsites.net/sitemap.xml"
+    }
+  ],
   "navigationFallback": {
     "rewrite": "/index.html",
     "exclude": ["/sitemap.xml","/robots.txt"]
@@ -7,11 +13,6 @@
   "mimeTypes": {
     ".xml": "application/xml",
     ".txt": "text/plain"
-  },
-  "routes": [
-    {
-      "route": "/sitemap.xml",
-      "rewrite": "https://backend22-e6bqgpcxfqhyfxfh.canadacentral-01.azurewebsites.net/sitemap.xml"
-    }
-  ]
+  }
+  
 }
