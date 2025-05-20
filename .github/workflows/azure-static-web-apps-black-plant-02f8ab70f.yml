@@ -16,6 +16,7 @@ jobs:
     name: Build and Deploy Job
     env:
       REACT_APP_API_URL: ${{ secrets.REACT_APP_API_URL }}
+      SITEMAP_URL: ${{ secrets.BACKEND_SITEMAP_URL }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -44,6 +45,10 @@ jobs:
         run: |
           rm -rf node_modules package-lock.json
           npm install
+        working-directory: ${{ env.WORKDIR }}
+
+      - name: Download sitemap.xml from backend
+        run: curl "$SITEMAP_URL" -o public/sitemap.xml
         working-directory: ${{ env.WORKDIR }}
 
         # 🛠 Step 5: Check for Config Issues
