@@ -15,43 +15,61 @@ interface UserJournalSectionProps {
   userName: string;
   editEntry: (updatedEntry: JournalEntryProp) => void;
   profileUserId: string;
+  selectedTag: string;
+  setSelectedTag: (tag: string) => void;
   allTags: string[];
+  hasEntries: boolean;
 }
 
 const UserJournalSection: React.FC<UserJournalSectionProps> = ({
   entries,
-  filteredEntries,
-  setFilteredEntries,
+ // filteredEntries,
+ // setFilteredEntries,
   handleAddEntry,
   authenticatedUserId,
   deleteEntry,
   editEntry,
   userName,
+  selectedTag,
+  setSelectedTag,
   profileUserId,
   allTags,
+  hasEntries
 }) => {
 
 
 
   const isOwner = authenticatedUserId === profileUserId;
-  console.log(" The Name" + userName);
+  console.log(" The Name"  //setFilteredEntries
+
+  );
   
   return (
     <div className="user-journal-section bg-gray-100 p-4 rounded-lg shadow-md">
       {/* Tags Section */}
       <section className="tags-section">
         <h2 className="text-xl font-semibold mb-3 ">See Journal Entries with:</h2>
-        <TagsFilter entries={entries} onFilterChange={setFilteredEntries} ProfileUser={profileUserId} allTags={allTags} />
-      </section>
+       { /*<TagsFilter 
+          entries={entries}
+          // onFilterChange={setFilteredEntries}
+            ProfileUser={profileUserId} 
+            allTags={allTags} />
+      </section>*/}
 
+          <TagsFilter
+          selectedTag={selectedTag}
+          setSelectedTag={setSelectedTag}
+          allTags={allTags}
+        />
+      </section>
       {/* Journal Entries Section */}
       <section className="journal-section">
         
         <NewJournalEntryForm addEntry={handleAddEntry} IsOwner={isOwner} />
-        {filteredEntries.length > 0 ? (
+        { hasEntries? (
           <div className="space-y-4 mt-4">
             <JournalEntryList
-              entries={filteredEntries}
+              entries={entries}
               userId={profileUserId} // Pass authenticated user ID
               onDelete={deleteEntry} // Pass delete function
               ownerName={userName}

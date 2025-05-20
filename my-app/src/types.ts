@@ -19,9 +19,10 @@ export interface Entry {
     lastName: string;
     email: string;
     profilePicture?: string;
-    journalEntries: JournalEntryProp[];
-    totalEntries;
+   // journalEntries: JournalEntryProp[];
+    //totalEntries;
     createdAt;
     updatedAt;
+    user: string;
   }
   

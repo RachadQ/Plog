@@ -8,6 +8,7 @@ import UserJournalSection from "./UserJournalSection";
 import { useAuth } from "../components/Default/AuthProvider";
 import GoogleAd from "./GoogleAd";
 import FileUpload from "./FileUpload";
+import { Console } from "console";
 
 const UserProfile: React.FC = () => {
   const { username } = useParams<{ username: string }>();
@@ -21,6 +22,7 @@ const UserProfile: React.FC = () => {
   const [hasMoreEntries, setHasMoreEntries] = useState(true);
   const [page, setPage] = useState(1);
   const [tags, setTags] = useState<string[]>([]);
+  const [selectedTag, setSelectedTag] = useState<string>("All");
   const [filteredEntries, setFilteredEntries] = useState<JournalEntryProp[]>(entries);
   const [initialLoading, setInitialLoading] = useState(true);
 
@@ -29,24 +31,20 @@ const UserProfile: React.FC = () => {
   const fetchProfile = useCallback(async () => {
     if (!username || loading || !hasMoreEntries) return;
     
-    setLoading(true);
+    //setLoading(true);
     try {
       
+      
       // Fetch Profile and Journal Entries
-      const response = await axios.get<ProfileWithEntriesResponse>(
-        `${apiUrl}/user/${username}`,
-        { 
-        
-           params: {
-            page, limit: 5 } 
-          
-        }
+      const response = await axios.get(
+      //  `http://localhost:3001/user/${username}/profile` ||
+        `${apiUrl}/user/${username}/profile`
       );
-
+      console.log("stringify" + JSON.stringify(response));
       
       setProfile(response.data);
       
-      // Append new unique entries
+      /*// Append new unique entries
       setEntries((prevEntries) => {
         const newEntries = response.data.journalEntries.filter(
           (entry) => !prevEntries.some((e) => e._id === entry._id)
@@ -58,6 +56,7 @@ const UserProfile: React.FC = () => {
       if (response.data.journalEntries.length === 0 || entries.length + response.data.journalEntries.length >= response.data.totalEntries) {
         setHasMoreEntries(false);
       }
+        */
     } catch (err) {
       console.error("Error fetching profile:", err);
       //error("Failed to load profile.");
@@ -73,34 +72,62 @@ const UserProfile: React.FC = () => {
       const tagResponse = await axios.get(`${apiUrl}/get/${username}/tags`);
       
       setTags(tagResponse.data.map((tag: { name: string }) => tag.name));
-     // console.log(JSON.stringify(tagResponse));
+
     } catch (err) {
       console.error("Error fetching tags:", err);
     }
   }, [apiUrl,username]);
 
+    /** Fetch Entries with Pagination + Tag */
+  const fetchEntries = useCallback(async () => {
+    if (!username || loading || !hasMoreEntries) return;
+
+    setLoading(true);
+    try {
+      const response = await axios.get(`${apiUrl}/user/${username}/entries`, {
+        params: {
+          page,
+          limit: 5,
+          tag: selectedTag
+        }
+      });
+
+      console.log(` ${selectedTag} stringify` + JSON.stringify(response));
+      const newEntries = response.data.journalEntries.filter(
+        (entry: JournalEntryProp) => !entries.some((e) => e._id === entry._id)
+      );
+
+      setEntries((prev) => [...prev, ...newEntries]);
+
+      if (entries.length + newEntries.length >= response.data.totalEntries) {
+        setHasMoreEntries(false);
+      }
+    } catch (err) {
+      console.error("Error fetching entries:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [apiUrl, username, page, selectedTag, entries, loading, hasMoreEntries]);
+
     /** Fetch Profile & Tags on Mount or Page Change */
     useEffect(() => {
-      if (apiUrl) {
+      console.log("fetching profile")
+     
       fetchProfile();
       fetchAllTags();
-      }
-    }, [apiUrl,fetchProfile, fetchAllTags]);
+      
+    }, [fetchProfile, fetchAllTags]);
     //only on mount:  }, [fetchProfile, fetchAllTags]);
-    
-    // Runs whenever page changes
-useEffect(() => {
-  if (apiUrl && username) {
-    fetchProfile();
-  }
-}, [apiUrl, username, page, fetchProfile]);
-  
-   
-    
-    
-    
-    
 
+    useEffect(() => {
+      setEntries([]);
+      setPage(1);
+      setHasMoreEntries(true);
+    }, [selectedTag]);
+   
+   useEffect(() => {
+    fetchEntries();
+  }, [fetchEntries,setFilteredEntries]);
     
   /** Infinite Scroll Observer */
   useEffect(() => {
@@ -128,6 +155,7 @@ useEffect(() => {
 
   useEffect(() => {
     if (!entries || !tags) return;
+    
     console.log("Entries to filter:", entries);
     console.log("Tags:", tags);
   
@@ -145,7 +173,7 @@ useEffect(() => {
         setFilteredEntries(entries); // If no tags selected, show all entries
       }
     }
-  }, [entries,tags,apiUrl ]); 
+  }, [entries,tags ]); 
   if (error) return <div className="p-6 text-red-500">{error}</div>;
   if (!profile) return <div className="p-6">Loading profile...</div>;
 
@@ -211,17 +239,20 @@ useEffect(() => {
   {/* Journal Entries Section */}
   <section className="py-6 md:py-4 mb-3">
     <UserJournalSection
-      entries={entries}
-      filteredEntries={filteredEntries}
-      setFilteredEntries={setFilteredEntries}
-      handleAddEntry={handleAddEntry}
-      authenticatedUserId={loginUserUserId || ''}
-      userName={profile.firstName + " "+ profile.lastName}
-      deleteEntry={deleteEntry}
-      editEntry={editEntry}
-      profileUserId={profile.id}
-      allTags={tags}
-
+          entries={entries}
+          //filteredEntries={filteredEntries}
+          // setFilteredEntries={setFilteredEntries}
+          handleAddEntry={handleAddEntry}
+          authenticatedUserId={loginUserUserId || ''}
+          userName={profile.firstName + " " + profile.lastName}
+          deleteEntry={deleteEntry}
+          editEntry={editEntry}
+          profileUserId={profile.id}
+          allTags={tags}
+          setSelectedTag={setSelectedTag}
+          hasEntries={entries.length > 0} filteredEntries={[]} setFilteredEntries={function (entries: JournalEntryProp[]): void {
+            throw new Error("Function not implemented.");
+          } } selectedTag={""}
     />
   </section>
   {/* Loader Element */}

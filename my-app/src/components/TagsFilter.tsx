@@ -4,11 +4,14 @@
   import TagsFilterProps from "../interface/TagFIlterProps";
 
 
-  const TagsFilter: React.FC<TagsFilterProps> = ({ entries, onFilterChange,ProfileUser,allTags }) => {
+  const TagsFilter: React.FC<TagsFilterProps> = ({ selectedTag, setSelectedTag, allTags }) => {
     const [activeTag, setActiveTag] = useState<string>("All");
+    const handleTagClick = (tag: string) => {
+      setSelectedTag(tag);
+    };
     const initialized = useRef(false); // Prevents multiple initial calls
   
-    // Function to filter entries based on tag selection
+    /*// Function to filter entries based on tag selection
     const handleFilterChange = useCallback(
       (tag: string) => {
         if (tag === "All") {
@@ -24,10 +27,10 @@
           );
         }
       },
-      [entries, ProfileUser, onFilterChange,activeTag]
-    );
+      [entries, ProfileUser, onFilterChange]
+    );*/
   
-    useEffect(() => {
+   /* useEffect(() => {
       if (initialized.current) return; // Prevent duplicate execution
       initialized.current = true;
   
@@ -62,33 +65,20 @@
       ]
     );
   
-
+*/
 
       return (
         
         <div className="tags-filter flex justify-center items-center w-full">
         <div className="flex flex-wrap gap-2 justify-center">
-          {/* Add "All" tag to the button list */}
-          <button
-            className={`px-4 py-2 rounded-full text-sm font-medium border 
-              ${activeTag === "All"
-                ? "bg-blue-500 text-white border-blue-500"
-                : "bg-gray-200 text-gray-700 border-gray-300"
-              } hover:bg-blue-500 hover:text-white transition`}
-            onClick={() => handleTagClick("All")}
-          >
-            All
-          </button>
-          
-          {/* Add dynamic tags */}
-          {allTags?.map((tag) => (
+          {["All", ...allTags].map((tag) => (
             <button
               key={tag}
               className={`px-4 py-2 rounded-full text-sm font-medium border 
-                ${activeTag === tag
-                ? "bg-blue-500 text-white border-blue-500"
-                : "bg-gray-200 text-gray-700 border-gray-300"
-              } hover:bg-blue-500 hover:text-white transition`}
+                ${selectedTag === tag
+                  ? "bg-blue-500 text-white border-blue-500"
+                  : "bg-gray-200 text-gray-700 border-gray-300"
+                } hover:bg-blue-500 hover:text-white transition`}
               onClick={() => handleTagClick(tag)}
             >
               {tag}
