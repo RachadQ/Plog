@@ -1,26 +1,16 @@
-
 {
-  "routes": [
-    {
-      "route": "/sitemap.xml",
-      "rewrite": "https://backend22-e6bqgpcxfqhyfxfh.canadacentral-01.azurewebsites.net/sitemap.xml"
-    },
-    {
-      "route": "/sitemap",
-      "rewrite": "https://backend22-e6bqgpcxfqhyfxfh.canadacentral-01.azurewebsites.net/sitemap.xml"
-    },
-    {
-      "route": "/robots.txt",
-      "rewrite": "/robots.txt"
-    }
-  ],
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/sitemap.xml","/robots.txt"]
+    "exclude": ["/sitemap.xml", "/robots.txt"]
   },
   "mimeTypes": {
     ".xml": "application/xml",
     ".txt": "text/plain"
-  }
-  
+  },
+  "routes": [
+    {
+     "route": "/sitemap",
+      "serve": "/sitemap.xml"
+    }
+  ]
 }
