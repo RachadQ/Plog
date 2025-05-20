@@ -37,7 +37,6 @@ const UserProfile: React.FC = () => {
       
       // Fetch Profile and Journal Entries
       const response = await axios.get(
-      //  `http://localhost:3001/user/${username}/profile` ||
         `${apiUrl}/user/${username}/profile`
       );
       console.log("stringify" + JSON.stringify(response));
