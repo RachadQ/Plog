@@ -4,6 +4,14 @@
     {
       "route": "/sitemap.xml",
       "rewrite": "https://backend22-e6bqgpcxfqhyfxfh.canadacentral-01.azurewebsites.net/sitemap.xml"
+    },
+    {
+      "route": "/sitemap",
+      "rewrite": "https://backend22-e6bqgpcxfqhyfxfh.canadacentral-01.azurewebsites.net/sitemap.xml"
+    },
+    {
+      "route": "/robots.txt",
+      "rewrite": "/robots.txt"
     }
   ],
   "navigationFallback": {
