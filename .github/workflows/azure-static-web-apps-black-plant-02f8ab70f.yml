@@ -46,6 +46,10 @@ jobs:
           npm install
         working-directory: ${{ env.WORKDIR }}
 
+      - name: Download sitemap.xml from backend
+        run: curl "$SITEMAP_URL/sitemap.xml" -o public/sitemap.xml
+        working-directory: ${{ env.WORKDIR }}
+
         # 🛠 Step 5: Check for Config Issues
       - name: Check tsconfig and Babel Config
         run: |
