@@ -1,7 +1,10 @@
 {
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/sitemap.xml", "/robots.txt"]
+    "exclude": [
+      "/sitemap.xml",
+      "/robots.txt"
+    ]
   },
   "mimeTypes": {
     ".xml": "application/xml",
@@ -9,8 +12,14 @@
   },
   "routes": [
     {
-     "route": "/sitemap",
-      "serve": "/sitemap.xml"
+      "route": "/sitemap",
+      "methods": [
+        "get"
+      ],
+      "rewrite": "https://backend22-e6bqgpcxfqhyfxfh.canadacentral-01.azurewebsites.net/sitemap.xml",
+      "allowedRoles": [
+        "anonymous"
+      ]
     }
   ]
 }
