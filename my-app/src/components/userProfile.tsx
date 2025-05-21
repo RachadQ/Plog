@@ -75,7 +75,7 @@ const UserProfile: React.FC = () => {
     } catch (err) {
       console.error("Error fetching tags:", err);
     }
-  }, [apiUrl,username]);
+  }, [username]);
 
     /** Fetch Entries with Pagination + Tag */
   const fetchEntries = useCallback(async () => {
@@ -85,7 +85,7 @@ const UserProfile: React.FC = () => {
     try {
       const response = await axios.get(`${apiUrl}/user/${username}/entries`, {
         params: {
-          page,
+          page ,
           limit: 5,
           tag: selectedTag
         }
@@ -106,27 +106,41 @@ const UserProfile: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [apiUrl, username, page, selectedTag, entries, loading, hasMoreEntries]);
+  }, [apiUrl, username, page, selectedTag]);
 
     /** Fetch Profile & Tags on Mount or Page Change */
     useEffect(() => {
       console.log("fetching profile")
      
       fetchProfile();
-      fetchAllTags();
+     // fetchAllTags();
       
-    }, [fetchProfile, fetchAllTags]);
+    }, [fetchProfile]);
     //only on mount:  }, [fetchProfile, fetchAllTags]);
 
     useEffect(() => {
-      setEntries([]);
-      setPage(1);
-      setHasMoreEntries(true);
+      console.log("fetching Tags")
+     
+   
+      fetchAllTags();
+      
+    }, [ username,apiUrl,fetchAllTags]);
+    useEffect(() => {
+      const resetAndFetch = async () => {
+        console.log("resetting ");
+        setEntries([]);
+        setPage(1);
+        setHasMoreEntries(true);
+        await fetchEntries(1); // force fetch page 1
+      };
+    
+      resetAndFetch();
     }, [selectedTag]);
    
    useEffect(() => {
+    console.log("fetching entries")
     fetchEntries();
-  }, [fetchEntries,setFilteredEntries]);
+  }, [page,selectedTag]);
     
   /** Infinite Scroll Observer */
   useEffect(() => {
@@ -150,13 +164,13 @@ const UserProfile: React.FC = () => {
         observer.unobserve(loaderRef.current);
       }
     };
-  }, [hasMoreEntries, loading,apiUrl]);
+  }, [hasMoreEntries, loading,loaderRef.current]);
 
   useEffect(() => {
     if (!entries || !tags) return;
     
     console.log("Entries to filter:", entries);
-    console.log("Tags:", tags);
+    
   
     // Only apply filtering when entries and tags are available
     if (entries.length > 0) {
@@ -257,7 +271,7 @@ const UserProfile: React.FC = () => {
   {/* Loader Element */}
 
   <div ref={loaderRef} className="loader"  style={{ height: '50px' }}>
-        {loading ? <p>Loading...</p> : <p>No more entries</p>}
+        {loading ? <p>Loading...</p> : hasMoreEntries ? null : <p>No more entries</p>}
       </div>
 </div>
 
