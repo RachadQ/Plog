@@ -43,19 +43,8 @@ const UserProfile: React.FC = () => {
       
       setProfile(response.data);
       
-      /*// Append new unique entries
-      setEntries((prevEntries) => {
-        const newEntries = response.data.journalEntries.filter(
-          (entry) => !prevEntries.some((e) => e._id === entry._id)
-        );
-        return [...prevEntries, ...newEntries];
-      });
-
-      // Check if there are more entries
-      if (response.data.journalEntries.length === 0 || entries.length + response.data.journalEntries.length >= response.data.totalEntries) {
-        setHasMoreEntries(false);
-      }
-        */
+   
+        
     } catch (err) {
       console.error("Error fetching profile:", err);
       //error("Failed to load profile.");
@@ -131,7 +120,7 @@ const UserProfile: React.FC = () => {
         setEntries([]);
         setPage(1);
         setHasMoreEntries(true);
-        await fetchEntries(1); // force fetch page 1
+        fetchEntries(); // force fetch page 1
       };
     
       resetAndFetch();
