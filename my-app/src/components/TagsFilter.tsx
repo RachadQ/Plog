@@ -10,62 +10,6 @@
       setSelectedTag(tag);
     };
     const initialized = useRef(false); // Prevents multiple initial calls
-  
-    /*// Function to filter entries based on tag selection
-    const handleFilterChange = useCallback(
-      (tag: string) => {
-        if (tag === "All") {
-          // When "All" is selected, show all entries for the user
-          onFilterChange(entries.filter((entry) => entry.user === ProfileUser));
-        } else {
-          // Filter entries by the selected tag
-          onFilterChange(
-            entries.filter(
-              (entry) =>
-                entry.user === ProfileUser && entry.tags.some((entryTag) => entryTag.name === tag)
-            )
-          );
-        }
-      },
-      [entries, ProfileUser, onFilterChange]
-    );*/
-  
-   /* useEffect(() => {
-      if (initialized.current) return; // Prevent duplicate execution
-      initialized.current = true;
-  
-      // Filter entries for the authenticated user
-      const userEntries = entries.filter((entry) => entry.user === ProfileUser);
-  
-      // Generate unique tags from the user's journal entries
-      const tagsSet = new Set<string>();
-      userEntries.forEach((entry) => {
-        entry.tags.forEach((tag) => tagsSet.add(tag.name)); // Assuming `tag.name` is the tag's identifier
-      });
-  
-      // Update allTags with the "All" option at the start
-      const updatedTags = ["All", ...Array.from(tagsSet)];
-  
-      // Pass the updated tags to the parent via the onFilterChange
-     // onFilterChange(entries); // Make sure to update the filtered entries based on initial state
-  
-      // Call filter change with "All" tag selected initially
-      handleFilterChange("All");
-    }, [entries, ProfileUser, onFilterChange, handleFilterChange]);
-  
-    // Handle tag click
-    const handleTagClick = useCallback(
-      (tag: string) => {
-      //  setActiveTag(tag);
-        handleFilterChange(tag);
-      },
-      [handleFilterChange,
-       // setActiveTag
-      
-      ]
-    );
-  
-*/
 
       return (
         
