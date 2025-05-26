@@ -39,7 +39,7 @@ const UserProfile: React.FC = () => {
       const response = await axios.get(
         `${apiUrl}/user/${username}/profile`
       );
-      console.log("stringify" + JSON.stringify(response));
+      
       
       setProfile(response.data);
       
@@ -51,7 +51,7 @@ const UserProfile: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  }, [apiUrl,username,page]);
+  }, [apiUrl,username]);
 
   /** Fetch Tags */
   const fetchAllTags = useCallback(async () => {
@@ -67,35 +67,50 @@ const UserProfile: React.FC = () => {
   }, [username]);
 
     /** Fetch Entries with Pagination + Tag */
-  const fetchEntries = useCallback(async () => {
+  const fetchEntries = useCallback(async (pageToFetch = page) => {
     if (!username || loading || !hasMoreEntries) return;
 
     setLoading(true);
     try {
       const response = await axios.get(`${apiUrl}/user/${username}/entries`, {
         params: {
-          page ,
+          page: pageToFetch,
           limit: 5,
-          tag: selectedTag
+         // tag: selectedTag
+          ...(selectedTag !== 'All' && { tag: selectedTag })
         }
       });
 
-      console.log(` ${selectedTag} stringify` + JSON.stringify(response));
-      const newEntries = response.data.journalEntries.filter(
-        (entry: JournalEntryProp) => !entries.some((e) => e._id === entry._id)
-      );
+      
 
-      setEntries((prev) => [...prev, ...newEntries]);
+      
+      const newEntries = response.data.journalEntries;
+    const totalEntries = response.data.totalEntries;
 
-      if (entries.length + newEntries.length >= response.data.totalEntries) {
-        setHasMoreEntries(false);
-      }
+    console.log(`Fetched page ${pageToFetch}:`, {
+      received: newEntries.length,
+      total: totalEntries,
+      hasMore: newEntries.length > 0 && (pageToFetch * 5 < totalEntries)
+    });
+
+    if (pageToFetch > 1 && newEntries.length === 0) {
+      setHasMoreEntries(false);
+      return;
+    }
+
+    if (pageToFetch === 1) {
+      setEntries(newEntries); // RESET
+    } else {
+      setEntries(prevEntries => [...prevEntries, ...newEntries]);
+    }
+
+    
     } catch (err) {
       console.error("Error fetching entries:", err);
     } finally {
       setLoading(false);
     }
-  }, [apiUrl, username, page, selectedTag]);
+  }, [apiUrl, username, page, selectedTag,entries]);
 
     /** Fetch Profile & Tags on Mount or Page Change */
     useEffect(() => {
@@ -120,40 +135,43 @@ const UserProfile: React.FC = () => {
         setEntries([]);
         setPage(1);
         setHasMoreEntries(true);
-        fetchEntries(); // force fetch page 1
+     //  fetchEntries(); // force fetch page 1
+      await fetchEntries(1);
       };
     
       resetAndFetch();
     }, [selectedTag]);
    
    useEffect(() => {
+    if(!loading && hasMoreEntries){
     console.log("fetching entries")
     fetchEntries();
-  }, [page,selectedTag]);
+    }
+  }, [page]);
     
   /** Infinite Scroll Observer */
-  useEffect(() => {
-
-    
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && hasMoreEntries && !loading) {
-          setPage((prevPage) => prevPage + 1);
-        }
-      },
-      { threshold: 1 }
-    );
-
-    if (loaderRef.current) {
-      observer.observe(loaderRef.current);
-    }
-
-    return () => {
-      if (loaderRef.current) {
-        observer.unobserve(loaderRef.current);
+ useEffect(() => {
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting && hasMoreEntries && !loading) {
+        console.log("Intersection observed, loading next page...");
+        setPage(prev => prev + 1);
       }
-    };
-  }, [hasMoreEntries, loading,loaderRef.current]);
+    },
+    { threshold: 1 }
+  );
+
+  const loader = loaderRef.current;
+  if (loader) {
+    observer.observe(loader);
+  }
+
+  return () => {
+    if (loader) {
+      observer.unobserve(loader);
+    }
+  };
+}, [hasMoreEntries, loading]);
 
   useEffect(() => {
     if (!entries || !tags) return;
@@ -254,7 +272,7 @@ const UserProfile: React.FC = () => {
           setSelectedTag={setSelectedTag}
           hasEntries={entries.length > 0} filteredEntries={[]} setFilteredEntries={function (entries: JournalEntryProp[]): void {
             throw new Error("Function not implemented.");
-          } } selectedTag={""}
+          } } selectedTag={selectedTag}
     />
   </section>
   {/* Loader Element */}
