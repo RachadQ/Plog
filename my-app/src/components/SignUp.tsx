@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { SignUpForm } from '../interface/UserInterface';  // Import the User interface
+import { useAuth } from './Default/AuthProvider';
 //import { User } from '../interface/UserInterface';  // Import the User interface
 
 const SignUp: React.FC = () => {
+  const { username: loggedInUsername ,loginUserUserId,error, apiUrl} = useAuth();
+   
   const [userData, setUserData] = useState<SignUpForm>({
     firstName: '',
     lastName: '',
@@ -23,7 +26,7 @@ const SignUp: React.FC = () => {
     e.preventDefault();
     
     // Send data to the backend for signup
-    const response = await fetch('http://localhost:3001/user/signUp', {
+    const response = await fetch(`${apiUrl}/user/signUp`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(userData),
