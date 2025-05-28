@@ -18,7 +18,7 @@ const ContactForm: React.FC = () => {
   const [rateLimited, setRateLimited] = useState<boolean>(false); // Track if rate limit is exceeded
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [successMessage, setSuccessMessage] = useState<string>('');
-  const { authToken,login, username: loggedInUsername ,loginUserUserId,error, apiUrl} = useAuth();
+  const {  apiUrl} = useAuth();
 
 
   // Google reCAPTCHA site key
