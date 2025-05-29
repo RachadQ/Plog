@@ -6,7 +6,7 @@ const GoogleAd: React.FC = () => {
   const [adKey, setAdKey] = useState(0); // Ensure re-renders have unique ad keys
   const [adConfig,setAdConfig] = useState({adClient: "", adSlot: ""})
   const adsInitializedRef = useRef(false); // Flag to track if ads have been initialized
-  const { authToken,loginUserUserId,apiUrl} = useAuth();
+  const { apiUrl} = useAuth();
   const scriptLoadedRef = useRef(false);
 
   useEffect(() => {

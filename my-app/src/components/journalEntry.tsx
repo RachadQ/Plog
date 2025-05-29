@@ -14,8 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./JournalEntryLayout/avatar
 import { Badge } from "./JournalEntryLayout/badge"
 import { Switch } from "./JournalEntryLayout/switch"
 import { Label } from "./JournalEntryLayout/label"
-import { MessageCircleIcon as ChatBubbleIcon, HeartIcon, ShareIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./JournalEntryLayout/collapsible"
+import { MessageCircleIcon as ChatBubbleIcon, HeartIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 import { Button } from "./JournalEntryLayout/button"
 
 import EditJournalEntryForm from './EditJournalEntryForm';

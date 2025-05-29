@@ -1,6 +1,5 @@
 import type React from "react"
-import { FaSearch } from "react-icons/fa"
-import axios from "axios"
+
 
 interface SearchResultsProps {
     searchQuery: string

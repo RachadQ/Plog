@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { Accept, useDropzone } from 'react-dropzone';
+import { useDropzone } from 'react-dropzone';
 import axios from "axios";
 import * as Dialog from "@radix-ui/react-dialog";
-import * as Toggle from "@radix-ui/react-toggle";
-import * as CollapsiblePrimitive from "@radix-ui/react-collapsible";
 import { faEdit } from '@fortawesome/free-solid-svg-icons';
 import { useAuth } from "./Default/AuthProvider";
 
