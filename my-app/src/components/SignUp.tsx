@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { SignUpForm } from '../interface/UserInterface';  // Import the User interface
 import { useAuth } from './Default/AuthProvider';
-//import { User } from '../interface/UserInterface';  // Import the User interface
+
 
 const SignUp: React.FC = () => {
-  const { username: loggedInUsername ,loginUserUserId,error, apiUrl} = useAuth();
+  const { apiUrl} = useAuth();
    
   const [userData, setUserData] = useState<SignUpForm>({
     firstName: '',

@@ -1,5 +1,5 @@
 
-  import React, { useState, useEffect,useCallback,useRef } from "react";
+  import React, { useState, useRef } from "react";
  
   import TagsFilterProps from "../interface/TagFIlterProps";
 

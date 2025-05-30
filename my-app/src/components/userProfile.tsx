@@ -24,7 +24,7 @@ const UserProfile: React.FC = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [selectedTag, setSelectedTag] = useState<string>("All");
   const [filteredEntries, setFilteredEntries] = useState<JournalEntryProp[]>(entries);
-  const [initialLoading, setInitialLoading] = useState(true);
+ 
 
 
   /** Fetch Profile & Entries */
