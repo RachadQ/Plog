@@ -58,7 +58,7 @@ const UserProfile: React.FC = () => {
     try {
       
       const tagResponse = await axios.get(`${apiUrl}/get/${username}/tags`);
-      
+      console.log();
       setTags(tagResponse.data.map((tag: { name: string }) => tag.name));
 
     } catch (err) {
@@ -100,8 +100,10 @@ const UserProfile: React.FC = () => {
 
     if (pageToFetch === 1) {
       setEntries(newEntries); // RESET
+      console.log(entries);
     } else {
       setEntries(prevEntries => [...prevEntries, ...newEntries]);
+      console.log(entries);
     }
 
     

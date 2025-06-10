@@ -11,7 +11,6 @@ const LandingPage: React.FC<{}>  = () => {
   return (
         
         <div>
-          
           <HeroSection/>
           <FeatureSection/>
           <CallToActionSection/>
