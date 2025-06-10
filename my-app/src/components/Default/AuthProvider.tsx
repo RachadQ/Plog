@@ -19,7 +19,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loginUserUserId, setLoginUserId] = useState<string | null>(null);
   const [username,setUsername] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
-  const [apiUrl, setApiUrl] = useState<string>(process.env.REACT_APP_API_URL || null);
+  const [apiUrl, setApiUrl] = useState<string>(process.env.REACT_APP_API_URL || "");
 
   const navigate = useNavigate();
 
