@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import UserProfile from './components/userProfile';
-import { BrowserRouter as Router, Route, Routes,useLocation  } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes  } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import LoginPage from './components/Login'
 import SignUp from './components/SignUp';
@@ -20,7 +20,7 @@ import TermsOfService from './components/TermsOfService';
 function App() {
 
   const { authToken } = useAuth();
-  const location = useLocation(); 
+   
   return (
     <div className="App">
       
