@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import UserProfile from './components/userProfile';
-import { BrowserRouter as Router, Route, Routes  } from 'react-router-dom';
+import { Route, Routes  } from 'react-router-dom';
 import HomePage from './components/HomePage';
 import LoginPage from './components/Login'
 import SignUp from './components/SignUp';

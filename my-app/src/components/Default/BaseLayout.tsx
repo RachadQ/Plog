@@ -1,8 +1,12 @@
 import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
-import children from "../../types/BaseLayout.interface"
-const BaseLayout: React.FC<children> = ({children }) => {
+
+interface BaseLayoutProps {
+  children: React.ReactNode;
+}
+
+const BaseLayout: React.FC<BaseLayoutProps> = ({children }) => {
 
   
     return (
