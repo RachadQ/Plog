@@ -254,7 +254,7 @@ const UserProfile: React.FC = () => {
 
   {/*Google ad Section*/}
   <section className="py-4">
-    <GoogleAd/>
+            <GoogleAd/>
   </section>
 
   
