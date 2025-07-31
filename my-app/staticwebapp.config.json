@@ -2,13 +2,20 @@
   "navigationFallback": {
     "rewrite": "/index.html",
     "exclude": [
+      "/images/*.{png,jpg,gif,svg}",
+      "/css/*",
+      "/js/*",
+      "/api/*",
       "/sitemap.xml",
-      "/robots.txt"
+      "/robots.txt",
+      "/ads.txt",
+      "/*.{ico,png,jpg,gif,svg}"
     ]
   },
   "mimeTypes": {
     ".xml": "application/xml",
-    ".txt": "text/plain"
+    ".txt": "text/plain",
+    ".json": "application/json"
   },
   "routes": [
     {
@@ -21,5 +28,8 @@
         "anonymous"
       ]
     }
-  ]
+  ],
+  "platform": {
+    "apiRuntime": "node:18"
+  }
 }

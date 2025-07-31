@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import UserProfile from './components/userProfile';
 import { Route, Routes  } from 'react-router-dom';
