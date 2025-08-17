@@ -4,10 +4,8 @@ import Cookies from "js-cookie";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 
-
 /// Create the context
 export const AuthContext = createContext<AuthContextType | null>(null);
-
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -19,14 +17,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [loginUserUserId, setLoginUserId] = useState<string | null>(null);
   const [username,setUsername] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [apiUrl, setApiUrl] = useState<string>(process.env.REACT_APP_API_URL || "");
 
   const navigate = useNavigate();
 
-  
-
-   // Memoized function to get the auth token from cookies
-   const getAuthToken = useCallback(() => {
+  // Memoized function to get the auth token from cookies
+  const getAuthToken = useCallback(() => {
     return Cookies.get("authToken") || null;
   }, []);
   
@@ -49,10 +46,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         console.error("Error decoding token", error);
       }
     }
-
-
   }, [getAuthToken]);
-
 
   const refreshAuthToken = async () => {
     const refreshToken = getRefreshToken();
@@ -86,8 +80,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-
   const login = async (email: string, password: string) => {
+    setIsLoading(true);
+    setError(null);
+    
     try {
       // Make the POST request to the server's /login route
       const response = await axios.post(`${apiUrl}/login`, {
@@ -95,6 +91,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         password,
       }, {
         withCredentials: true,
+        timeout: 10000, // 10 second timeout
       });
 
       if (response.status === 200) {
@@ -106,24 +103,54 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setAuthToken(response.data.token);
         setAuthRefreshToken(response.data.refreshToken);
 
-        // Redirect to the provided URL or home page
+        // Extract user info from token for immediate UI update
+        try {
+          const base64Payload = response.data.token.split('.')[1];
+          const decoded = JSON.parse(atob(base64Payload));
+          const username = decoded.username || decoded.email || decoded.sub;
+          const id = decoded.id;
+          setLoginUserId(id);
+          setUsername(username);
+        } catch (error) {
+          console.error("Error decoding token", error);
+        }
+
+        // Navigate immediately after successful login
         const redirectUrl = response.data.redirectUrl || '/';
         navigate(redirectUrl);
       } else {
         throw new Error('Login failed');
       }
     } catch (error: any) {
-      setError(error.response?.data?.message || 'An error occurred');
+      let errorMessage = 'An error occurred during login';
+      
+      if (error.code === 'ECONNABORTED') {
+        errorMessage = 'Login request timed out. Please try again.';
+      } else if (error.response?.status === 401) {
+        errorMessage = 'Invalid email or password';
+      } else if (error.response?.status === 429) {
+        errorMessage = 'Too many login attempts. Please try again later.';
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      setError(errorMessage);
       console.error("Login error:", error);
+      throw error; // Re-throw to let the Login component handle it
+    } finally {
+      setIsLoading(false);
     }
   };
-
   
   const logout = async () =>{ 
     //clear auth and set token and remove cookies
-
     try{
-      await axios.post(`${apiUrl}/logout`, {}, { withCredentials: true });
+      await axios.post(`${apiUrl}/logout`, {}, { 
+        withCredentials: true,
+        timeout: 5000 // 5 second timeout for logout
+      });
     }
     catch(err)
     {
@@ -131,14 +158,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
     setAuthToken(null);
     setAuthRefreshToken(null);
+    setLoginUserId(null);
+    setUsername("");
+    setError(null);
     Cookies.remove('authToken');
     Cookies.remove('refreshToken');
     navigate('/login');
   }
 
-
-
-  
   return (
     <AuthContext.Provider value={{
       authToken,
@@ -151,14 +178,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       login,
       logout,
       error,
+      isLoading,
       apiUrl, // Provide apiUrl in context if needed in other components
       }}>
       {children} {/* Ensure this exists and is properly passed */}
     </AuthContext.Provider>
   );
 };
-
-
 
 // Custom hook to access the AuthContext
 export const useAuth = () => {

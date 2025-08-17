@@ -1,5 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import BaseLayout from "./Default/BaseLayout";
+import { useAuth } from "./Default/AuthProvider";
 import axios from 'axios';
 
 const mockBookmarks = [
@@ -38,54 +39,93 @@ const mockScheduled = [
   { id: 1, title: 'Serverless Functions in AWS Lambda', date: 'Scheduled for Apr 18' },
   { id: 2, title: 'Styling with Tailwind CSS 4.0', date: 'Scheduled for Apr 20' }
 ];
+
+// Skeleton loading components
+const SkeletonCard = () => (
+  <div className="bg-white shadow-md rounded-2xl p-4 animate-pulse">
+    <div className="h-4 bg-gray-200 rounded mb-2"></div>
+    <div className="h-3 bg-gray-200 rounded w-3/4"></div>
+  </div>
+);
+
+const SkeletonProfile = () => (
+  <div className="col-span-1 bg-white shadow-sm rounded-xl p-4 flex flex-col items-center text-center space-y-2 animate-pulse">
+    <div className="w-16 h-16 bg-gray-200 rounded-full"></div>
+    <div className="h-5 bg-gray-200 rounded w-32"></div>
+    <div className="h-4 bg-gray-200 rounded w-24"></div>
+    <div className="flex items-center gap-2">
+      <div className="h-3 bg-gray-200 rounded w-16"></div>
+      <div className="w-1 h-3 bg-gray-300 rounded"></div>
+      <div className="h-3 bg-gray-200 rounded w-16"></div>
+    </div>
+  </div>
+);
+
 const HomePage: React.FC<{}>  = () => {
-
-   /*const [user, setUser] = useState(null);
-  const [logs, setLogs] = useState([]);
-  const [bookmarks, setBookmarks] = useState([]);
-*/
-const [drafts, setDrafts] = useState(mockDrafts);
-const [scheduled, setScheduled] = useState(mockScheduled);
-
-const [user, setUser] = useState(mockUser);
+  const { isLoading: authLoading } = useAuth();
+  const [isPageLoading, setIsPageLoading] = useState(true);
+  const [drafts, setDrafts] = useState(mockDrafts);
+  const [scheduled, setScheduled] = useState(mockScheduled);
+  const [user, setUser] = useState(mockUser);
   const [logs, setLogs] = useState(mockLogs);
   const [bookmarks, setBookmarks] = useState(mockBookmarks);
 
   useEffect(() => {
     const fetchData = async () => {
+      // Simulate a small delay to show loading state
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
       const userRes = mockUser;
       const logsRes = mockLogs;
       const bookmarksRes = mockBookmarks;
-     
+      
+      setIsPageLoading(false);
     };
-    fetchData();
-  }, []);
+    
+    if (!authLoading) {
+      fetchData();
+    }
+  }, [authLoading]);
+
+  // Show loading state while auth is loading or page is loading
+  if (authLoading || isPageLoading) {
+    return (
+      <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <SkeletonProfile />
+        <div className="col-span-2 grid gap-4">
+          <SkeletonCard />
+          <div className="grid md:grid-cols-2 gap-4">
+            <SkeletonCard />
+            <SkeletonCard />
+          </div>
+          <div className="grid md:grid-cols-2 gap-4">
+            <SkeletonCard />
+            <SkeletonCard />
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!user) return <div className="p-6">Loading...</div>;
 
   return (
     <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-  {/* Profile Card */}
-  <div className="col-span-1 bg-white shadow-sm rounded-xl p-4 flex flex-col items-center text-center space-y-2">
-    <img
-      src={user.avatar}
-      alt={`${user.name}'s avatar`}
-      className="w-16 h-16 rounded-full border border-gray-300"
-    />
-    <h2 className="text-lg font-medium">{user.name}</h2>
-    <p className="text-sm text-gray-600">{user.logsPosted} logs posted</p>
-    <div className="flex items-center gap-2 text-xs text-gray-500">
-      <span>{user.followers} followers</span>
-      <span className="text-gray-400">•</span>
-      <span>{user.following} following</span>
-    </div>
-  </div>
-
-
-
-  
-  
-
+      {/* Profile Card */}
+      <div className="col-span-1 bg-white shadow-sm rounded-xl p-4 flex flex-col items-center text-center space-y-2">
+        <img
+          src={user.avatar}
+          alt={`${user.name}'s avatar`}
+          className="w-16 h-16 rounded-full border border-gray-300"
+        />
+        <h2 className="text-lg font-medium">{user.name}</h2>
+        <p className="text-sm text-gray-600">{user.logsPosted} logs posted</p>
+        <div className="flex items-center gap-2 text-xs text-gray-500">
+          <span>{user.followers} followers</span>
+          <span className="text-gray-400">•</span>
+          <span>{user.following} following</span>
+        </div>
+      </div>
 
       {/* Main Section */}
       <div className="col-span-2 grid gap-4">

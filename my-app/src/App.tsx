@@ -16,12 +16,22 @@ import About from './components/About';
 import ContactForm from './components/Default/ContactForm';
 import TermsOfService from './components/TermsOfService';
 
-function App() {
+// Loading overlay component
+const LoadingOverlay = () => (
+  <div className="fixed inset-0 bg-white bg-opacity-90 flex items-center justify-center z-50">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-500 mx-auto mb-4"></div>
+      <p className="text-gray-600 text-lg">Loading...</p>
+    </div>
+  </div>
+);
 
-  const { authToken } = useAuth();
+function App() {
+  const { authToken, isLoading } = useAuth();
    
   return (
     <div className="App">
+      {isLoading && <LoadingOverlay />}
       
       <BaseLayout>
         <Routes>
