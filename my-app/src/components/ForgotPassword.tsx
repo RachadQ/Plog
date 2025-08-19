@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useAuth } from './Default/AuthProvider';
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const { username: loggedInUsername ,loginUserUserId, apiUrl} = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -12,7 +14,7 @@ const ForgotPassword: React.FC = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:3001/forgot-password', { email });
+      const response = await axios.post(`${apiUrl}/forgot-password`, { email });
       setMessage(response.data.message);
     } catch (err) {
       if (axios.isAxiosError(err)) {

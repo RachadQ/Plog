@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import axios from 'axios';
 import '../styles/entry.css'
 import { formatDistanceToNow } from 'date-fns';
-import JournalEntryProp from '../interface/JournalEntryProp';
+
 import JournalEntryProps from '../interface/JournalEntryProps';
 import {
   Card,
