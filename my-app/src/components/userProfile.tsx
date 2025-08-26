@@ -8,6 +8,7 @@ import UserJournalSection from "./UserJournalSection";
 import { useAuth } from "../components/Default/AuthProvider";
 import GoogleAd from "./GoogleAd";
 import FileUpload from "./FileUpload";
+import ChatBox from "./ChatBox";
 import { Console } from "console";
 
 const UserProfile: React.FC = () => {
@@ -282,6 +283,9 @@ const UserProfile: React.FC = () => {
   <div ref={loaderRef} className="loader"  style={{ height: '50px' }}>
         {loading ? <p>Loading...</p> : hasMoreEntries ? null : <p>No more entries</p>}
       </div>
+      
+  {/* Chat Box Component */}
+  <ChatBox username={username || ''} />
 </div>
 
     
