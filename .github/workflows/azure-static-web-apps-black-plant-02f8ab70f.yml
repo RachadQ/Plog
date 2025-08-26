@@ -41,10 +41,10 @@ jobs:
           fi
 
         # 🛠 Step 4: Clean and Install Dependencies
-      - name: Clean and Install Dependencies
+      - name: Install production dependencies
         run: |
-          rm -rf node_modules package-lock.json
-          npm install
+          rm -rf node_modules
+          npm ci --omit=dev --no-audit --no-fund
         working-directory: ${{ env.WORKDIR }}
 
       - name: Download sitemap.xml from backend
