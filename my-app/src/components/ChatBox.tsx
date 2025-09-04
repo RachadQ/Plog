@@ -87,7 +87,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ username }) => {
       <button
         onClick={toggleChat}
         className="bg-blue-600 hover:bg-blue-700 text-white rounded-full p-4 shadow-lg transition-all duration-200 transform hover:scale-105"
-        title="Chat with AI about your journal entries"
+        title="Chat with AI about this user's journal entries"
       >
         {isOpen ? (
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
