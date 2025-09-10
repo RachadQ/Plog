@@ -37,7 +37,7 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
   const [newImages, setNewImages] = useState<File[]>([]);
   const [imagesToRemove, setImagesToRemove] = useState<number[]>([]);
   const {apiUrl} = useAuth();
-  console.log("this is " + JSON.stringify(entry, null, 2))
+ 
   
   // Synchronize tags with the entry object
   useEffect(() => {
