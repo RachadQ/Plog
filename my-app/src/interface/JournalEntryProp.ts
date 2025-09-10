@@ -1,5 +1,13 @@
 import { TagProp } from './TagProp';
 
+export interface ImageMetadata {
+    url: string;
+    fileName: string;
+    uploadedAt: string;
+    size: number;
+    mimeType: string;
+    order: number;
+}
 
 export default interface JournalEntryProp {
     _id: string;
@@ -10,7 +18,6 @@ export default interface JournalEntryProp {
     createdAt: string;
     updatedAt: string;
     tags: TagProp[];
-
-
+    images?: ImageMetadata[];
   }
   

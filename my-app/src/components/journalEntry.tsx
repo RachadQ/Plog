@@ -4,6 +4,7 @@ import '../styles/entry.css'
 import { formatDistanceToNow } from 'date-fns';
 
 import JournalEntryProps from '../interface/JournalEntryProps';
+import { ImageMetadata } from '../interface/JournalEntryProp';
 import {
   Card,
   CardContent,
@@ -98,6 +99,32 @@ return (
       <div className="prose max-w-none text-left">
         <h3 className="text-xl font-bold mb-2">{entry.title || 'No Title'}</h3>
         <p className="mb-4">{entry.content || 'No Content'}</p>
+        
+        {/* Images Display */}
+        {entry.images && entry.images.length > 0 && (
+          <div className="mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {entry.images
+                .sort((a, b) => a.order - b.order)
+                .map((image, index) => (
+                  <div key={index} className="relative group">
+                    <img
+                      src={image.url}
+                      alt={image.fileName}
+                      className="w-full h-48 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+                      onClick={() => window.open(image.url, '_blank')}
+                    />
+                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 rounded-lg flex items-center justify-center">
+                      <span className="text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-sm font-medium">
+                        Click to view full size
+                      </span>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
+        )}
+        
         <div className="flex items-center space-x-2 mb-4 text-left">
           <Switch
             id={`show-issues-${'unknown'}-${entry.createdAt || 'unknown'}`}

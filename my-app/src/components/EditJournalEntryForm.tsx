@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import JournalEntryProp from '../interface/JournalEntryProp';
+import JournalEntryProp, { ImageMetadata } from '../interface/JournalEntryProp';
 import { TagProp } from '../interface/TagProp';
 import Cookies from 'js-cookie';
 import axios, { AxiosError } from 'axios';
@@ -17,6 +17,7 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
     user: initialValues?.user || '', // Ensure user is defined
     createdAt: initialValues?.createdAt || '', // Set createdAt as needed
     updatedAt: initialValues?.updatedAt || '', // Set updatedAt as needed
+    images: (initialValues as any)?.images || [], // Include images - cast to any to handle type mismatch
   });
 
   function getCookie(name: string): string | null {
@@ -33,6 +34,8 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
   const [query, setQuery] = useState('');
   const [tags, setTags] = useState<TagProp[]>(initialValues?.tags || []);
   const [tagSuggestions, setTagSuggestions] = useState<TagProp[]>([]);
+  const [newImages, setNewImages] = useState<File[]>([]);
+  const [imagesToRemove, setImagesToRemove] = useState<number[]>([]);
   const {apiUrl} = useAuth();
   console.log("this is " + JSON.stringify(entry, null, 2))
   
@@ -46,9 +49,14 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
   const fetchTagSuggestions = async (query: string) => {
     try {
       const response = await axios.get(`${apiUrl}/tags/search?query=${query}`);
+    
       setTagSuggestions(response.data || []);
     } catch (error) {
-      console.error('Error fetching tag suggestions:', error);
+      let msg = 'Unknown server error';
+      if (axios.isAxiosError(error)) {
+        msg = error.response?.data?.message || msg;
+      }
+      alert(`Failed to update: ${msg}`);
     }
   };
 
@@ -75,6 +83,25 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
     setTags((prevTags) => prevTags.filter((tag) => tag._id !== tagId));
   };
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      const files = Array.from(e.target.files);
+      setNewImages(prev => [...prev, ...files]);
+    }
+  };
+
+  const handleRemoveNewImage = (index: number) => {
+    setNewImages(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleRemoveExistingImage = (index: number) => {
+    setImagesToRemove(prev => [...prev, index]);
+  };
+
+  const handleRestoreImage = (index: number) => {
+    setImagesToRemove(prev => prev.filter(i => i !== index));
+  };
+
   const handleChange = (field: string, value: string | string[]) => {
     setEntry((prevEntry) => ({ ...prevEntry, [field]: value }));
   };
@@ -90,6 +117,7 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
     if (!storedToken && refreshToken) {
     
       const tokenResponse = await axios.post(`${apiUrl}/refresh-token`, { authToken });
+   
       storedToken = tokenResponse.data.accessToken;
       console.log("This stored: " + JSON.stringify(storedToken));
       Cookies.set('authToken', storedToken);
@@ -101,21 +129,32 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
       return;
     }
     try {
-      const response = await axios.put(`${apiUrl}/edit/${entry._id}`, {
-        title: entry.title,
-        content: entry.content,
-        tags: tags.map((tag) => tag.name), // Send only tag names
-        updatedAt: entry.updatedAt,
-        user: entry.user, // Ensure user ID is sent if needed
-        
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${authToken}` // Use the token in the Authorization header
-        }
+      // Prepare form data for multipart upload
+      const formData = new FormData();
+      formData.append('title', entry.title);
+      formData.append('content', entry.content);
+      formData.append('tags', JSON.stringify(tags.map((tag) => tag.name)));
+      formData.append('updatedAt', entry.updatedAt);
+      formData.append('user', entry.user);
+      
+      // Add images to remove
+      if (imagesToRemove.length > 0) {
+        formData.append('removeImages', JSON.stringify(imagesToRemove));
       }
-    
-    );
+      
+      // Add new images
+      newImages.forEach(image => {
+        formData.append('images', image);
+      });
+
+      const response = await axios.put(`${apiUrl}/edit/${entry._id}`, formData, {
+      
+
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      });
   console.log(response.data);
       console.log("Journal entry updated successfully:", response.data);
       onSubmit(response.data.entry); // Notify parent component of successful submission
@@ -201,6 +240,85 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
           ))}
         </div>
       </div>
+      
+      {/* Images Section */}
+      <div className="mt-4">
+        <label className="block font-semibold mb-2">Images:</label>
+        
+        {/* Existing Images */}
+        {entry.images && entry.images.length > 0 && (
+          <div className="mb-4">
+            <p className="text-sm text-gray-600 mb-2">Current Images:</p>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              {entry.images.map((image, index) => {
+                const isMarkedForRemoval = imagesToRemove.includes(index);
+                return (
+                  <div key={index} className={`relative group ${isMarkedForRemoval ? 'opacity-50' : ''}`}>
+                    <img
+                      src={image.url}
+                      alt={image.fileName}
+                      className="w-full h-24 object-cover rounded-lg border border-gray-300"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => isMarkedForRemoval ? handleRestoreImage(index) : handleRemoveExistingImage(index)}
+                      className={`absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-sm transition-colors ${
+                        isMarkedForRemoval 
+                          ? 'bg-green-500 text-white hover:bg-green-600' 
+                          : 'bg-red-500 text-white hover:bg-red-600'
+                      }`}
+                    >
+                      {isMarkedForRemoval ? '↶' : '×'}
+                    </button>
+                    {isMarkedForRemoval && (
+                      <div className="absolute inset-0 bg-red-500 bg-opacity-20 rounded-lg flex items-center justify-center">
+                        <span className="text-red-600 text-xs font-medium">Will be removed</span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+        
+        {/* New Images Upload */}
+        <div className="mb-4">
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+        
+        {/* New Images Preview */}
+        {newImages.length > 0 && (
+          <div className="mb-4">
+            <p className="text-sm text-gray-600 mb-2">New Images ({newImages.length}):</p>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              {newImages.map((image, index) => (
+                <div key={index} className="relative group">
+                  <img
+                    src={URL.createObjectURL(image)}
+                    alt={`new-${index}`}
+                    className="w-full h-24 object-cover rounded-lg border border-gray-300"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveNewImage(index)}
+                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 transition-colors"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+      
       <div className="mt-4 flex justify-center space-x-4">
         <button
           type="submit"

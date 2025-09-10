@@ -20,6 +20,7 @@ interface NewJournalEntryFormProps {
     const [query, setQuery] = useState(""); 
     const [tagSuggestions, setTagSuggestions] = useState<TagProp[]>([]);
     const [name, SetName] = useState<string | null>(null);
+    const [images, setImages] = useState<File[]>([]);
 
  
   useEffect(() => {
@@ -62,10 +63,9 @@ interface NewJournalEntryFormProps {
         setIsOpen(false); // Open the post form when the user is authenticated and has userId
       }
     }, [loginUserUserId]);
-    const handleSubmit = async (e: React.FormEvent) => {
-     
-      e.preventDefault(); // Prevent the default form submission behavior
 
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault(); // Prevent the default form submission behavior
       
       if (!loginUserUserId) {
         alert("User ID is required.");
@@ -76,33 +76,49 @@ interface NewJournalEntryFormProps {
         
         const tagNames = tags.map(tag => tag.name); // Extract tag names
         // Create the journal entry with resolved tag IDs
-        const response = await axios.post(
-          `${apiUrl}/entrie`,
-          { title, content, tags: tagNames },
-          { headers: { Authorization: `Bearer ${authToken}` } }
-        );
+
+        //prepare the form data
+        const formData = new FormData();
+        formData.append('title', title);
+        formData.append('content', content);
+        formData.append("tags", tagNames.join(','));
+        
+        images.forEach(image => {
+          formData.append('images', image);
+        });
+
+        const response = await axios.post(`${apiUrl}/entrie`, formData, {
+          headers: { Authorization: `Bearer ${authToken}`,
+          'Content-Type': 'multipart/form-data',
+        
+        }});
     
+        const createdEntry = response.data.entry;
         // Add the new entry to the local state (or any state management you use)
         addEntry({
-          _id: response.data.entry._id, // Assuming backend returns the new entry with _id
-          title,
-          content,
-          tags: tags.map((tag) => ({ _id: tag._id, name: tag.name } )), // Ensure tags are correctly formatted
+          _id: createdEntry._id, // Assuming backend returns the new entry with _id
+          title: createdEntry.title,
+          content: createdEntry.content,
+          tags: createdEntry.tags.map((tag) => ({ _id: tag._id, name: tag.name } )), // Ensure tags are correctly formatted
           user: loginUserUserId as string,
           ownerName: name ,
-          createdAt: new Date().toISOString(),  // Add createdAt timestamp
-          updatedAt: new Date().toISOString(),  // Add updatedAt timestamp
+          createdAt: createdEntry.createdAt || new Date().toISOString(),  // Use backend timestamp
+          updatedAt: createdEntry.updatedAt || new Date().toISOString(),  // Use backend timestamp
+          images: createdEntry.images || [], // Include images from backend response
         });
+
+         
     
         // Reset form fields
         setTitle('');
         setContent('');
         setTags([]);
+        setImages([]);
         setIsOpen(false);
         
       } catch (error) {
-        console.error(error);
-
+        console.error('Submission error:', error);
+        alert("An error occurred while submitting the entry.");
          // Handle Axios-specific errors
   if (axios.isAxiosError(error)) {
     if (error.response) {
@@ -191,6 +207,7 @@ interface NewJournalEntryFormProps {
         >
           <span className="text-left">Start a post</span>
         </button>
+
         {isOpen && (
           <div className="fixed inset-0 bg-gray-700 bg-opacity-75 flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
@@ -261,6 +278,50 @@ interface NewJournalEntryFormProps {
                     </ul>
                   )}
                 </div>
+
+
+                {/* Images Input */}
+                <div className='flex flex-col space-y-2'>
+                  <label className='text-sm font-semibold'>Upload Images:</label>
+                  <input type="file" 
+                  multiple
+                  accept='image/*'
+                  onChange={(e) => {
+                    if(e.target.files){
+                      setImages(Array.from(e.target.files));
+                    }
+                  }}
+                  className="w-full p-2 border border-gray-300 rounded-lg"
+                  />
+                </div>
+
+                {/* Images Preview */}
+                { images.length > 0 && (
+                  <div className='mt-2'>
+                    <p className="text-sm text-gray-600 mb-2">Preview ({images.length} image{images.length !== 1 ? 's' : ''}):</p>
+                    <div className='grid grid-cols-2 md:grid-cols-3 gap-2'>
+                      {images.map((image,idx) => (
+                        <div key={idx} className="relative group">
+                          <img 
+                            src={URL.createObjectURL(image)}
+                            alt={`preview-${idx}`} 
+                            className="w-full h-24 object-cover rounded-lg border border-gray-300" 
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newImages = images.filter((_, index) => index !== idx);
+                              setImages(newImages);
+                            }}
+                            className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600 transition-colors"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* Submit and Cancel Buttons */}
                 <button
