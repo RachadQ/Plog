@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { SignUpForm } from '../interface/UserInterface';  // Import the User interface
 import { useAuth } from './Default/AuthProvider';
 
-
 const SignUp: React.FC = () => {
   const { apiUrl} = useAuth();
-   
+
   const [userData, setUserData] = useState<SignUpForm>({
     firstName: '',
     lastName: '',
@@ -14,7 +13,7 @@ const SignUp: React.FC = () => {
     confirmPassword: '',
     profilePicture: '',
     username: '',
-   
+
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,14 +23,14 @@ const SignUp: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     // Send data to the backend for signup
     const response = await fetch(`${apiUrl}/user/signUp`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(userData),
     });
-    
+
     const result = await response.json();
     if (response.ok) {
       // Handle successful signup

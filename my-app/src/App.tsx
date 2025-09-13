@@ -28,11 +28,11 @@ const LoadingOverlay = () => (
 
 function App() {
   const { authToken, isLoading } = useAuth();
-   
+
   return (
     <div className="App">
       {isLoading && <LoadingOverlay />}
-      
+
       <BaseLayout>
         <Routes>
           {/*<UserProfile profile={profileData} />*/}
@@ -53,8 +53,7 @@ function App() {
           <Route path="/contact" element={<ContactForm />} />
 
         </Routes>
-        </BaseLayout>
-      
+      </BaseLayout>
     </div>
   );
 }

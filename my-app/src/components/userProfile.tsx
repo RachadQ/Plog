@@ -14,9 +14,9 @@ import { Console } from "console";
 const UserProfile: React.FC = () => {
   const { username } = useParams<{ username: string }>();
   const [profile, setProfile] = useState<ProfileWithEntriesResponse | null>(null);
-  
+
   const { username: loggedInUsername ,loginUserUserId,error, apiUrl} = useAuth();
- 
+
   const [entries, setEntries] = useState<JournalEntryProp[]>([]);
   const [loading, setLoading] = useState(false);
   const loaderRef = useRef(null);
@@ -25,27 +25,21 @@ const UserProfile: React.FC = () => {
   const [tags, setTags] = useState<string[]>([]);
   const [selectedTag, setSelectedTag] = useState<string>("All");
   const [filteredEntries, setFilteredEntries] = useState<JournalEntryProp[]>(entries);
- 
-
 
   /** Fetch Profile & Entries */
   const fetchProfile = useCallback(async () => {
     if (!username || loading || !hasMoreEntries) return;
-    
+
     //setLoading(true);
     try {
-      
-      
+
       // Fetch Profile and Journal Entries
       const response = await axios.get(
         `${apiUrl}/user/${username}/profile`
       );
-      
-      
+
       setProfile(response.data);
-      
-   
-        
+
     } catch (err) {
       console.error("Error fetching profile:", err);
       //error("Failed to load profile.");
@@ -57,7 +51,7 @@ const UserProfile: React.FC = () => {
   /** Fetch Tags */
   const fetchAllTags = useCallback(async () => {
     try {
-      
+
       const tagResponse = await axios.get(`${apiUrl}/get/${username}/tags`);
       console.log();
       setTags(tagResponse.data.map((tag: { name: string }) => tag.name));
@@ -82,9 +76,6 @@ const UserProfile: React.FC = () => {
         }
       });
 
-      
-
-      
       const newEntries = response.data.journalEntries;
     const totalEntries = response.data.totalEntries;
 
@@ -107,7 +98,6 @@ const UserProfile: React.FC = () => {
       console.log(entries);
     }
 
-    
     } catch (err) {
       console.error("Error fetching entries:", err);
     } finally {
@@ -118,19 +108,18 @@ const UserProfile: React.FC = () => {
     /** Fetch Profile & Tags on Mount or Page Change */
     useEffect(() => {
       console.log("fetching profile")
-     
+
       fetchProfile();
      // fetchAllTags();
-      
+
     }, [fetchProfile]);
     //only on mount:  }, [fetchProfile, fetchAllTags]);
 
     useEffect(() => {
       console.log("fetching Tags")
-     
-   
+
       fetchAllTags();
-      
+
     }, [ username,apiUrl,fetchAllTags]);
     useEffect(() => {
       const resetAndFetch = async () => {
@@ -141,17 +130,17 @@ const UserProfile: React.FC = () => {
      //  fetchEntries(); // force fetch page 1
       await fetchEntries(1);
       };
-    
+
       resetAndFetch();
     }, [selectedTag]);
-   
+
    useEffect(() => {
     if(!loading && hasMoreEntries){
     console.log("fetching entries")
     fetchEntries();
     }
   }, [page]);
-    
+
   /** Infinite Scroll Observer */
  useEffect(() => {
   const observer = new IntersectionObserver(
@@ -178,10 +167,9 @@ const UserProfile: React.FC = () => {
 
   useEffect(() => {
     if (!entries || !tags) return;
-    
+
     console.log("Entries to filter:", entries);
-    
-  
+
     // Only apply filtering when entries and tags are available
     if (entries.length > 0) {
       if (tags.length > 0) {
@@ -196,7 +184,7 @@ const UserProfile: React.FC = () => {
         setFilteredEntries(entries); // If no tags selected, show all entries
       }
     }
-  }, [entries,tags ]); 
+  }, [entries,tags ]);
   if (error) return <div className="p-6 text-red-500">{error}</div>;
   if (!profile) return <div className="p-6">Loading profile...</div>;
 
@@ -210,23 +198,19 @@ const UserProfile: React.FC = () => {
 
   const editEntry = (entry: JournalEntryProp) => {
     setEntries((prevEntries) =>
-     
+
       prevEntries.map((e) => (e._id === entry._id ? entry : e
-        
+
       ))
     );
   };
 
- 
- 
   const downloadResume = async () => {
    // const googleDriveLink = "https://drive.google.com/uc?export=download&id=1UsBGAJXyWdA9WQxzJeGj85fsSDKZFEVI";
   //window.location.href = googleDriveLink;
 
      alert('Integrating a safe privacy protected resume upload, please come back later.');
   };
-
- 
 
   return (
     <div className="bg-gray-100 p-4 rounded-lg shadow-md mb-4">
@@ -258,7 +242,6 @@ const UserProfile: React.FC = () => {
             <GoogleAd/>
   </section>
 
-  
   {/* Journal Entries Section */}
   <section className="py-6 md:py-4 mb-3">
     <UserJournalSection
@@ -283,12 +266,11 @@ const UserProfile: React.FC = () => {
   <div ref={loaderRef} className="loader"  style={{ height: '50px' }}>
         {loading ? <p>Loading...</p> : hasMoreEntries ? null : <p>No more entries</p>}
       </div>
-      
+
   {/* Chat Box Component */}
   <ChatBox username={username || ''} />
 </div>
 
-    
   );
 };
 

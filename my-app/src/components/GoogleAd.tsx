@@ -94,7 +94,7 @@ const GoogleAd: React.FC = () => {
           await loadGoogleAdsScript();
           scriptLoadedRef.current = true;
         }
-        
+
         // Small delay to ensure script is fully loaded
         setTimeout(() => {
           initializeAds();
@@ -116,7 +116,7 @@ const GoogleAd: React.FC = () => {
   const handleAdRender = () => {
     // Force re-render by updating the adKey
     setAdKey((prevKey) => prevKey + 1);
-    
+
     // Re-initialize ads after a short delay
     setTimeout(() => {
       if (window.adsbygoogle && Array.isArray(window.adsbygoogle)) {
@@ -147,7 +147,7 @@ const GoogleAd: React.FC = () => {
 
   return (
     <div className="flex items-center justify-center">
-      <div 
+      <div
         className="w-full max-w-4xl h-[125px] p-3 m-1 border border-gray-200 rounded-md shadow-md"
         onClick={handleAdRender}
       >

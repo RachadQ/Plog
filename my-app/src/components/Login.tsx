@@ -11,11 +11,11 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
-    
+
     if (isLoading) return; // Prevent multiple submissions
-    
+
     setIsLoading(true);
-    
+
     try {
       await login(email, password);
       // Navigation will be handled by AuthProvider after successful login
@@ -25,7 +25,7 @@ const LoginPage: React.FC = () => {
       setIsLoading(false);
     }
   };
-  
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-96">
@@ -65,8 +65,8 @@ const LoginPage: React.FC = () => {
             type="submit"
             disabled={isLoading}
             className={`w-full py-2 rounded mt-4 transition-all duration-200 ${
-              isLoading 
-                ? 'bg-gray-400 cursor-not-allowed' 
+              isLoading
+                ? 'bg-gray-400 cursor-not-allowed'
                 : 'bg-blue-500 hover:bg-blue-600'
             } text-white flex items-center justify-center`}
           >
@@ -83,7 +83,7 @@ const LoginPage: React.FC = () => {
             )}
           </button>
         </form>
-        
+
         {/* Forgot Password Link */}
         <p className="mt-4 text-sm text-center">
           Forgot your password?{' '}

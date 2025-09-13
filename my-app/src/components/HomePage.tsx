@@ -74,14 +74,14 @@ const HomePage: React.FC<{}>  = () => {
     const fetchData = async () => {
       // Simulate a small delay to show loading state
       await new Promise(resolve => setTimeout(resolve, 300));
-      
+
       const userRes = mockUser;
       const logsRes = mockLogs;
       const bookmarksRes = mockBookmarks;
-      
+
       setIsPageLoading(false);
     };
-    
+
     if (!authLoading) {
       fetchData();
     }

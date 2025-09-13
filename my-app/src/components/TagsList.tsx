@@ -10,5 +10,5 @@ const TagsList: React.FC<TagsListProps> = ({ tags }) => {
       </div>
     );
   };
-  
+
   export default TagsList;

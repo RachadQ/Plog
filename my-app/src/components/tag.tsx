@@ -8,5 +8,5 @@ const Tag: React.FC<TagProp> = ({ name }) => {
       </span>
     );
   };
-  
+
   export default Tag;

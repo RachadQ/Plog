@@ -25,10 +25,9 @@ const JournalEntry: React.FC<JournalEntryProps> = ({entry,isOwner,ownerName,onDe
    const { authToken,login, username: loggedInUsername ,loginUserUserId,error,apiUrl } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [openSolutions, setOpenSolutions] = useState<number[]>([]); // Not currently used, but available for future expansion
-  
+
   const [isIssuesVisible, setIsIssuesVisible] = useState(false); // Not currently used, but available for future expansion
   const handleDeleteEntry = async (entryId: string) => {
-
 
     // Ask the user for confirmation before deleting
     const confirmDelete = window.confirm('Are you sure you want to delete this entry?');
@@ -44,7 +43,7 @@ const JournalEntry: React.FC<JournalEntryProps> = ({entry,isOwner,ownerName,onDe
           withCredentials:true,
       }
        )
-      
+
        console.log("This is sent in edit" + response.data.message); // You can log the success message
 
        // Call the onDelete function passed via props to update the state
@@ -99,7 +98,7 @@ return (
       <div className="prose max-w-none text-left">
         <h3 className="text-xl font-bold mb-2">{entry.title || 'No Title'}</h3>
         <p className="mb-4">{entry.content || 'No Content'}</p>
-        
+
         {/* Images Display */}
         {entry.images && entry.images.length > 0 && (
           <div className="mb-4">
@@ -124,7 +123,7 @@ return (
             </div>
           </div>
         )}
-        
+
         <div className="flex items-center space-x-2 mb-4 text-left">
           <Switch
             id={`show-issues-${'unknown'}-${entry.createdAt || 'unknown'}`}
@@ -182,14 +181,14 @@ return (
       <span>{/*entry.likes*/  0}</span>
       <span className="ml-1">Likes</span>
     </span>
-    
+
     {/* Comment Button */}
     <span className="text-gray-600 flex items-center cursor-pointer" /*onClick={handleCommentClick}*/>
       <ChatBubbleIcon className="w-5 h-5 mr-1" />
       <span>{/*entry.comments*/  0}</span>
       <span className="ml-1">Comments</span>
     </span>
-    
+
     {isOwner && (
       <div className="flex justify-end space-x-4">
         <Button

@@ -6,9 +6,8 @@ import { useAuth } from './Default/AuthProvider';
 interface NewJournalEntryFormProps {
   addEntry: (newEntry: JournalEntryProp) => void;
   IsOwner: boolean;
-  //refreshProfile: 
+  //refreshProfile:
 }
-
 
   const NewJournalEntryForm: React.FC<NewJournalEntryFormProps> = ({ addEntry,IsOwner,/*refreshProfile*/ }) => {
     const [title, setTitle] = useState('');
@@ -17,29 +16,28 @@ interface NewJournalEntryFormProps {
     const [tags, setTags] = useState<TagProp[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [userId, setUserId] = useState<string | null>(null);
-    const [query, setQuery] = useState(""); 
+    const [query, setQuery] = useState("");
     const [tagSuggestions, setTagSuggestions] = useState<TagProp[]>([]);
     const [name, SetName] = useState<string | null>(null);
     const [images, setImages] = useState<File[]>([]);
 
- 
   useEffect(() => {
     // Function to fetch user information
     const fetchUserInfo = async () => {
       try {
-       
+
         if (authToken) {
-  
+
           // Fetch user information
           const response = await axios.get(`${apiUrl}/user-info`, {
             headers: {
               Authorization: `Bearer ${authToken}`, // Include token in Authorization header
             },
           });
-  
+
           if (response.status === 200) {
             const { _id } = response.data; // Assuming `_id` is the userId field in the response
-            
+
             SetName(response.data.name);
             setUserId(_id); // Store userId in state
           } else {
@@ -52,11 +50,11 @@ interface NewJournalEntryFormProps {
         console.error('Error fetching user info:', error);
       }
     };
-  
+
     // Call the function
     fetchUserInfo();
   }, [authToken,loginUserUserId,apiUrl]);
-  
+
     // Automatically show the "Start a post" button once the user is authenticated.
     useEffect(() => {
       if (loginUserUserId) {
@@ -66,14 +64,14 @@ interface NewJournalEntryFormProps {
 
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault(); // Prevent the default form submission behavior
-      
+
       if (!loginUserUserId) {
         alert("User ID is required.");
         return;
       }
-    
+
       try {
-        
+
         const tagNames = tags.map(tag => tag.name); // Extract tag names
         // Create the journal entry with resolved tag IDs
 
@@ -82,7 +80,7 @@ interface NewJournalEntryFormProps {
         formData.append('title', title);
         formData.append('content', content);
         formData.append("tags", tagNames.join(','));
-        
+
         images.forEach(image => {
           formData.append('images', image);
         });
@@ -90,9 +88,9 @@ interface NewJournalEntryFormProps {
         const response = await axios.post(`${apiUrl}/entrie`, formData, {
           headers: { Authorization: `Bearer ${authToken}`,
           'Content-Type': 'multipart/form-data',
-        
+
         }});
-    
+
         const createdEntry = response.data.entry;
         // Add the new entry to the local state (or any state management you use)
         addEntry({
@@ -107,15 +105,13 @@ interface NewJournalEntryFormProps {
           images: createdEntry.images || [], // Include images from backend response
         });
 
-         
-    
         // Reset form fields
         setTitle('');
         setContent('');
         setTags([]);
         setImages([]);
         setIsOpen(false);
-        
+
       } catch (error) {
         console.error('Submission error:', error);
         alert("An error occurred while submitting the entry.");
@@ -141,25 +137,21 @@ interface NewJournalEntryFormProps {
   }
       }
     };
-  
+
     const handleOpen = () => {
       setIsOpen(true);
     };
-
-
 
     const handleTagChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
       const newQuery = e.target.value;
       setQuery(newQuery);
 
-      
-    
       // Filter out duplicates from the current tags
       const uniqueTags = newQuery
         .split(",")
         .map((tag) => tag.trim())
         .filter((name) => name && !tags.some((tag) => tag.name.toLowerCase() === name));
-    
+
       // Check if there are new valid tags
       if (uniqueTags.length > 0) {
         try {
@@ -173,7 +165,6 @@ interface NewJournalEntryFormProps {
         setTagSuggestions([]); // Clear suggestions if no new valid tags
       }
     };
-    
 
   const handleAddTag = (tag: TagProp) => {
     // Add the selected tag from the suggestion list if not already added
@@ -195,8 +186,7 @@ interface NewJournalEntryFormProps {
       setIsOpen(false);
     }
   }, [loginUserUserId]);
-  
-  
+
   return (
     <>
     {IsOwner && loginUserUserId &&(
@@ -279,11 +269,10 @@ interface NewJournalEntryFormProps {
                   )}
                 </div>
 
-
                 {/* Images Input */}
                 <div className='flex flex-col space-y-2'>
                   <label className='text-sm font-semibold'>Upload Images:</label>
-                  <input type="file" 
+                  <input type="file"
                   multiple
                   accept='image/*'
                   onChange={(e) => {
@@ -302,10 +291,10 @@ interface NewJournalEntryFormProps {
                     <div className='grid grid-cols-2 md:grid-cols-3 gap-2'>
                       {images.map((image,idx) => (
                         <div key={idx} className="relative group">
-                          <img 
+                          <img
                             src={URL.createObjectURL(image)}
-                            alt={`preview-${idx}`} 
-                            className="w-full h-24 object-cover rounded-lg border border-gray-300" 
+                            alt={`preview-${idx}`}
+                            className="w-full h-24 object-cover rounded-lg border border-gray-300"
                           />
                           <button
                             type="button"
@@ -345,7 +334,5 @@ interface NewJournalEntryFormProps {
     )}
   </>)
   };
-  
+
   export default NewJournalEntryForm;
-
-

@@ -3,7 +3,7 @@ import { useState } from "react";
 const UserImage = () => {
 
     const [image, setImage] = useState<string | null>(null);
-    
+
     return (
         <div>
           <h2>Your Profile Image</h2>

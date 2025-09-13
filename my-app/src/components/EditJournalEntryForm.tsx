@@ -6,7 +6,6 @@ import axios, { AxiosError } from 'axios';
 import { EditJournalEntryFormProps } from '../interface/EditJournalEntryFormProps';
 import { useAuth } from './Default/AuthProvider';
 
-
 const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValues, onSubmit, onCancel }) => {
   const [entry, setEntry] = useState<JournalEntryProp>({
     _id: initialValues?._id || '', // Ensure _id is defined, even if initialValues is not provided
@@ -37,11 +36,9 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
   const [newImages, setNewImages] = useState<File[]>([]);
   const [imagesToRemove, setImagesToRemove] = useState<number[]>([]);
   const {apiUrl} = useAuth();
- 
-  
+
   // Synchronize tags with the entry object
   useEffect(() => {
-    
     if (tags !== entry.tags) {
       setEntry((prevEntry) => ({ ...prevEntry, tags }));
     }
@@ -49,7 +46,7 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
   const fetchTagSuggestions = async (query: string) => {
     try {
       const response = await axios.get(`${apiUrl}/tags/search?query=${query}`);
-    
+
       setTagSuggestions(response.data || []);
     } catch (error) {
       let msg = 'Unknown server error';
@@ -115,9 +112,9 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
     console.log("token " +  token);
     // Refresh the token if it doesn't exist
     if (!storedToken && refreshToken) {
-    
+
       const tokenResponse = await axios.post(`${apiUrl}/refresh-token`, { authToken });
-   
+
       storedToken = tokenResponse.data.accessToken;
       console.log("This stored: " + JSON.stringify(storedToken));
       Cookies.set('authToken', storedToken);
@@ -136,19 +133,18 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
       formData.append('tags', JSON.stringify(tags.map((tag) => tag.name)));
       formData.append('updatedAt', entry.updatedAt);
       formData.append('user', entry.user);
-      
+
       // Add images to remove
       if (imagesToRemove.length > 0) {
         formData.append('removeImages', JSON.stringify(imagesToRemove));
       }
-      
+
       // Add new images
       newImages.forEach(image => {
         formData.append('images', image);
       });
 
       const response = await axios.put(`${apiUrl}/edit/${entry._id}`, formData, {
-      
 
         headers: {
           Authorization: `Bearer ${authToken}`,
@@ -240,11 +236,11 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
           ))}
         </div>
       </div>
-      
+
       {/* Images Section */}
       <div className="mt-4">
         <label className="block font-semibold mb-2">Images:</label>
-        
+
         {/* Existing Images */}
         {entry.images && entry.images.length > 0 && (
           <div className="mb-4">
@@ -263,8 +259,8 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
                       type="button"
                       onClick={() => isMarkedForRemoval ? handleRestoreImage(index) : handleRemoveExistingImage(index)}
                       className={`absolute -top-2 -right-2 rounded-full w-6 h-6 flex items-center justify-center text-sm transition-colors ${
-                        isMarkedForRemoval 
-                          ? 'bg-green-500 text-white hover:bg-green-600' 
+                        isMarkedForRemoval
+                          ? 'bg-green-500 text-white hover:bg-green-600'
                           : 'bg-red-500 text-white hover:bg-red-600'
                       }`}
                     >
@@ -281,7 +277,7 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
             </div>
           </div>
         )}
-        
+
         {/* New Images Upload */}
         <div className="mb-4">
           <input
@@ -292,7 +288,7 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
             className="w-full p-2 border border-gray-300 rounded"
           />
         </div>
-        
+
         {/* New Images Preview */}
         {newImages.length > 0 && (
           <div className="mb-4">
@@ -318,7 +314,7 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
           </div>
         )}
       </div>
-      
+
       <div className="mt-4 flex justify-center space-x-4">
         <button
           type="submit"
@@ -338,9 +334,4 @@ const EditJournalEntryForm: React.FC<EditJournalEntryFormProps> = ({ initialValu
   );
 };
 
-  
-
-
 export default EditJournalEntryForm;
-
-

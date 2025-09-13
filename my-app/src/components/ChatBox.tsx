@@ -123,7 +123,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ username }) => {
                 </ul>
               </div>
             )}
-            
+
             {messages.map((message) => (
               <div
                 key={message.id}
@@ -140,15 +140,15 @@ const ChatBox: React.FC<ChatBoxProps> = ({ username }) => {
                   <p className={`text-xs mt-1 ${
                     message.isUser ? 'text-blue-100' : 'text-gray-500'
                   }`}>
-                    {message.timestamp.toLocaleTimeString([], { 
-                      hour: '2-digit', 
-                      minute: '2-digit' 
+                    {message.timestamp.toLocaleTimeString([], {
+                      hour: '2-digit',
+                      minute: '2-digit'
                     })}
                   </p>
                 </div>
               </div>
             ))}
-            
+
             {isLoading && (
               <div className="flex justify-start">
                 <div className="bg-gray-100 text-gray-800 px-4 py-2 rounded-lg">
@@ -163,7 +163,7 @@ const ChatBox: React.FC<ChatBoxProps> = ({ username }) => {
                 </div>
               </div>
             )}
-            
+
             <div ref={messagesEndRef} />
           </div>
 
@@ -197,4 +197,3 @@ const ChatBox: React.FC<ChatBoxProps> = ({ username }) => {
 };
 
 export default ChatBox;
-

@@ -11,7 +11,6 @@ export interface Entry {
     updatedAt: string;
   }
 
-
   export interface ProfileWithEntriesResponse {
     id: string;
     username: string;
@@ -25,4 +24,3 @@ export interface Entry {
     updatedAt;
     user: string;
   }
-  
