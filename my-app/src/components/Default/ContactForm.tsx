@@ -4,9 +4,6 @@ import ContactFormData from '@/interface/ContactFormData';
 import axios from 'axios';
 import { useAuth } from './AuthProvider';
 
-
-
-
 const ContactForm: React.FC = () => {
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
@@ -19,7 +16,6 @@ const ContactForm: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [successMessage, setSuccessMessage] = useState<string>('');
   const {  apiUrl} = useAuth();
-
 
   // Google reCAPTCHA site key
   const recaptchaSiteKey: string = 'your-site-key-here'; // Replace with your actual Google reCAPTCHA site key

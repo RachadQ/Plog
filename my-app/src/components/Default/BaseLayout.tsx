@@ -8,7 +8,6 @@ interface BaseLayoutProps {
 
 const BaseLayout: React.FC<BaseLayoutProps> = ({children }) => {
 
-  
     return (
       <div>
         <Header />
@@ -17,9 +16,8 @@ const BaseLayout: React.FC<BaseLayoutProps> = ({children }) => {
         <Footer />
         </main>
 
-        
       </div>
     );
   };
-  
+
   export default BaseLayout;

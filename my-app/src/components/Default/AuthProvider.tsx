@@ -26,7 +26,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const getAuthToken = useCallback(() => {
     return Cookies.get("authToken") || null;
   }, []);
-  
+
   const getRefreshToken = useCallback(() => {
     return Cookies.get("refreshToken") || null;
   }, []);
@@ -83,7 +83,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     setError(null);
-    
+
     try {
       // Make the POST request to the server's /login route
       const response = await axios.post(`${apiUrl}/login`, {
@@ -123,7 +123,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
     } catch (error: any) {
       let errorMessage = 'An error occurred during login';
-      
+
       if (error.code === 'ECONNABORTED') {
         errorMessage = 'Login request timed out. Please try again.';
       } else if (error.response?.status === 401) {
@@ -135,7 +135,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       } else if (error.message) {
         errorMessage = error.message;
       }
-      
+
       setError(errorMessage);
       console.error("Login error:", error);
       throw error; // Re-throw to let the Login component handle it
@@ -143,11 +143,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsLoading(false);
     }
   };
-  
-  const logout = async () =>{ 
+
+  const logout = async () =>{
     //clear auth and set token and remove cookies
     try{
-      await axios.post(`${apiUrl}/logout`, {}, { 
+      await axios.post(`${apiUrl}/logout`, {}, {
         withCredentials: true,
         timeout: 5000 // 5 second timeout for logout
       });

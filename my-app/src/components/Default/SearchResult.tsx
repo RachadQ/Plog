@@ -1,6 +1,5 @@
 import type React from "react"
 
-
 interface SearchResultsProps {
     searchQuery: string
     searchResults: any[] // Search results will be an array, but with any type for now
@@ -8,7 +7,7 @@ interface SearchResultsProps {
     handleSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void
     handleSearchSubmit: (e: React.FormEvent) => void
   }
-  
+
   const SearchResults: React.FC<SearchResultsProps> = ({
     searchQuery,
     searchResults,
@@ -16,8 +15,7 @@ interface SearchResultsProps {
     handleSearchChange,
     handleSearchSubmit,
   }) => {
-    
-  
+
     return (
         <>
         {/* Search form */}
@@ -35,7 +33,7 @@ interface SearchResultsProps {
             />
           </div>
         </form>
-      
+
         {/* Search results */}
         {searchResults.length > 0 && (
             <div className="absolute left-0 right-0 mx-auto max-w-2xl bg-white border border-gray-200 rounded-lg shadow-lg z-10 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100" style={{ top: '69px' ,right: "20px"}}>
@@ -63,5 +61,5 @@ interface SearchResultsProps {
       </>
     )
   }
-  
+
   export default SearchResults
