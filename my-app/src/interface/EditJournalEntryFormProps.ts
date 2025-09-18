@@ -18,4 +18,3 @@ export interface EditJournalEntryFormProps {
     onSubmit: (entry: JournalEntryProp) => void;
     onCancel: () => void;
   }
-  

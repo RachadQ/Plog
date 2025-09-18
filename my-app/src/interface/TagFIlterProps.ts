@@ -9,4 +9,3 @@ export default interface TagsFilterProps {
   setSelectedTag: (tag: string) => void;
   allTags: string[];
   };
-  

@@ -9,4 +9,3 @@ export default interface JournalEntryProps {
     onDelete: (entryId: string) => void;
     onEdit: (entry: JournalEntryProp) => void;
   }
-  

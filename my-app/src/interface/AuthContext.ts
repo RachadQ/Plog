@@ -13,5 +13,5 @@ export interface AuthContextType {
     error: string | null;
     isLoading: boolean;
     apiUrl: string | null;
-  
+
   }

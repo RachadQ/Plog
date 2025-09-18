@@ -4,5 +4,5 @@ import { TagProp } from "./TagProp";
 export interface TagsListProps {
     tags: TagProp[];
   }
-  
+
   export {};

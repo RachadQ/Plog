@@ -6,13 +6,13 @@ const CallToActionSection: React.FC<{}>  = () => {
 
   const handleNavigate = () =>
     {
-      
+
       navigate("/login");
-    
+
     };
-  
+
   return (
-        
+
         <div>
         {/* Call To Action */}
         <section className="bg-gray-100 py-12 mt-16">

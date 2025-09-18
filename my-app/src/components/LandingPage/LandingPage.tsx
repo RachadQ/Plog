@@ -7,9 +7,8 @@ import FeatureSection from './FeaturesSection';
 
 const LandingPage: React.FC<{}>  = () => {
 
-  
   return (
-        
+
         <div>
           <HeroSection/>
           <FeatureSection/>

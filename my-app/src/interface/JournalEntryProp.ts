@@ -20,4 +20,3 @@ export default interface JournalEntryProp {
     tags: TagProp[];
     images?: ImageMetadata[];
   }
-  

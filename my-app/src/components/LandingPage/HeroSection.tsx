@@ -8,9 +8,9 @@ const HeroSection: React.FC<{}> = () => {
 
   const handleNavigate = () =>
     {
-      
+
       navigate("/login");
-    
+
     };
   return (
     <div>
