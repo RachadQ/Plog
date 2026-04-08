@@ -81,12 +81,6 @@ const UserProfile: React.FC = () => {
         const newEntries = response.data.journalEntries;
         const totalEntries = response.data.totalEntries;
 
-        console.log(`Fetched page ${pageToFetch}:`, {
-          received: newEntries.length,
-          total: totalEntries,
-          hasMore: newEntries.length > 0 && pageToFetch * 5 < totalEntries,
-        });
-
         if (pageToFetch > 1 && newEntries.length === 0) {
           setHasMoreEntries(false);
           return;
@@ -94,10 +88,8 @@ const UserProfile: React.FC = () => {
 
         if (pageToFetch === 1) {
           setEntries(newEntries); // RESET
-          console.log(entries);
         } else {
           setEntries((prevEntries) => [...prevEntries, ...newEntries]);
-          console.log(entries);
         }
       } catch (err) {
         console.error("Error fetching entries:", err);
@@ -110,21 +102,16 @@ const UserProfile: React.FC = () => {
 
   /** Fetch Profile & Tags on Mount or Page Change */
   useEffect(() => {
-    console.log("fetching profile");
-
     fetchProfile();
     // fetchAllTags();
   }, [fetchProfile]);
   //only on mount:  }, [fetchProfile, fetchAllTags]);
 
   useEffect(() => {
-    console.log("fetching Tags");
-
     fetchAllTags();
   }, [username, apiUrl, fetchAllTags]);
   useEffect(() => {
     const resetAndFetch = async () => {
-      console.log("resetting ");
       setEntries([]);
       setPage(1);
       setHasMoreEntries(true);
@@ -137,7 +124,6 @@ const UserProfile: React.FC = () => {
 
   useEffect(() => {
     if (!loading && hasMoreEntries) {
-      console.log("fetching entries");
       fetchEntries();
     }
   }, [page]);
@@ -168,8 +154,6 @@ const UserProfile: React.FC = () => {
 
   useEffect(() => {
     if (!entries || !tags) return;
-
-    console.log("Entries to filter:", entries);
 
     // Only apply filtering when entries and tags are available
     if (entries.length > 0) {
