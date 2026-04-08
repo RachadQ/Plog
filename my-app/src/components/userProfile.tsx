@@ -133,7 +133,6 @@ const UserProfile: React.FC = () => {
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && hasMoreEntries && !loading) {
-          console.log("Intersection observed, loading next page...");
           setPage((prev) => prev + 1);
         }
       },
