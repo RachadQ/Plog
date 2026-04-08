@@ -1,43 +1,59 @@
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState } from "react";
 import BaseLayout from "./Default/BaseLayout";
 import { useAuth } from "./Default/AuthProvider";
-import axios from 'axios';
+import axios from "axios";
 
 const mockBookmarks = [
-  'Advanced Git Techniques',
-  'Introduction to GraphQL',
-  'Optimizing SQL Queries',
-  'Dependency Injection in .NET'
+  "Advanced Git Techniques",
+  "Introduction to GraphQL",
+  "Optimizing SQL Queries",
+  "Dependency Injection in .NET",
 ];
 
 const mockUser = {
-  name: 'Kenneth Netthhagnalya',
-  avatar: 'https://via.placeholder.com/100',
+  name: "Kenneth Netthhagnalya",
+  avatar: "https://via.placeholder.com/100",
   logsPosted: 20,
   followers: 112,
   following: 98,
   stats: {
     logsThisWeek: 5,
-    mostLiked: 'Python Tips and Tricks',
-    mostCommented: 'Getting Started with Django'
-  }
+    mostLiked: "Python Tips and Tricks",
+    mostCommented: "Getting Started with Django",
+  },
 };
 
 const mockLogs = [
-  { id: 1, title: 'Building a REST API with FastAPI', date: '3 days ago' },
-  { id: 2, title: 'Python Tips and Tricks', date: '5 days ago' },
-  { id: 3, title: 'Database Migrations with Alembic', date: '7 days ago' },
-  { id: 4, title: 'Error Handling in JavaScript', date: '8 days ago' }
+  { id: 1, title: "Building a REST API with FastAPI", date: "3 days ago" },
+  { id: 2, title: "Python Tips and Tricks", date: "5 days ago" },
+  { id: 3, title: "Database Migrations with Alembic", date: "7 days ago" },
+  { id: 4, title: "Error Handling in JavaScript", date: "8 days ago" },
 ];
 
 const mockDrafts = [
-  { id: 1, title: 'Working with WebSockets in Node.js', date: 'Draft saved 2 days ago' },
-  { id: 2, title: 'A Guide to Progressive Web Apps', date: 'Draft saved 1 week ago' }
+  {
+    id: 1,
+    title: "Working with WebSockets in Node.js",
+    date: "Draft saved 2 days ago",
+  },
+  {
+    id: 2,
+    title: "A Guide to Progressive Web Apps",
+    date: "Draft saved 1 week ago",
+  },
 ];
 
 const mockScheduled = [
-  { id: 1, title: 'Serverless Functions in AWS Lambda', date: 'Scheduled for Apr 18' },
-  { id: 2, title: 'Styling with Tailwind CSS 4.0', date: 'Scheduled for Apr 20' }
+  {
+    id: 1,
+    title: "Serverless Functions in AWS Lambda",
+    date: "Scheduled for Apr 18",
+  },
+  {
+    id: 2,
+    title: "Styling with Tailwind CSS 4.0",
+    date: "Scheduled for Apr 20",
+  },
 ];
 
 // Skeleton loading components
@@ -61,7 +77,7 @@ const SkeletonProfile = () => (
   </div>
 );
 
-const HomePage: React.FC<{}>  = () => {
+const HomePage: React.FC<{}> = () => {
   const { isLoading: authLoading } = useAuth();
   const [isPageLoading, setIsPageLoading] = useState(true);
   const [drafts, setDrafts] = useState(mockDrafts);
@@ -73,7 +89,7 @@ const HomePage: React.FC<{}>  = () => {
   useEffect(() => {
     const fetchData = async () => {
       // Simulate a small delay to show loading state
-      await new Promise(resolve => setTimeout(resolve, 300));
+      await new Promise((resolve) => setTimeout(resolve, 300));
 
       const userRes = mockUser;
       const logsRes = mockLogs;
@@ -132,7 +148,7 @@ const HomePage: React.FC<{}>  = () => {
         {/* Recent Logs */}
         <div className="bg-white shadow-md rounded-2xl p-4">
           <h3 className="text-lg font-bold mb-2">Recent Logs</h3>
-          {logs.map(log => (
+          {logs.map((log) => (
             <div key={log.id} className="border-b py-2">
               <h4 className="font-semibold">{log.title}</h4>
               <p className="text-sm text-gray-500">{log.date}</p>
@@ -146,7 +162,7 @@ const HomePage: React.FC<{}>  = () => {
         <div className="grid md:grid-cols-2 gap-4">
           <div className="bg-white shadow-md rounded-2xl p-4">
             <h3 className="text-lg font-bold mb-2">Drafts</h3>
-            {drafts.map(draft => (
+            {drafts.map((draft) => (
               <div key={draft.id} className="border-b py-2">
                 <h4 className="font-semibold">{draft.title}</h4>
                 <p className="text-sm text-gray-500">{draft.date}</p>
@@ -156,7 +172,7 @@ const HomePage: React.FC<{}>  = () => {
 
           <div className="bg-white shadow-md rounded-2xl p-4">
             <h3 className="text-lg font-bold mb-2">Scheduled</h3>
-            {scheduled.map(sch => (
+            {scheduled.map((sch) => (
               <div key={sch.id} className="border-b py-2">
                 <h4 className="font-semibold">{sch.title}</h4>
                 <p className="text-sm text-gray-500">{sch.date}</p>

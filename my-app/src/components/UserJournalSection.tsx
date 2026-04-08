@@ -22,8 +22,6 @@ interface UserJournalSectionProps {
 
 const UserJournalSection: React.FC<UserJournalSectionProps> = ({
   entries,
- // filteredEntries,
- // setFilteredEntries,
   handleAddEntry,
   authenticatedUserId,
   deleteEntry,
@@ -33,27 +31,25 @@ const UserJournalSection: React.FC<UserJournalSectionProps> = ({
   setSelectedTag,
   profileUserId,
   allTags,
-  hasEntries
+  hasEntries,
 }) => {
-
   const isOwner = authenticatedUserId === profileUserId;
-  console.log(" The Name"  //setFilteredEntries
-
-  );
 
   return (
     <div className="user-journal-section bg-gray-100 p-4 rounded-lg shadow-md">
       {/* Tags Section */}
       <section className="tags-section">
-        <h2 className="text-xl font-semibold mb-3 ">See Journal Entries with:</h2>
-       { /*<TagsFilter
+        <h2 className="text-xl font-semibold mb-3 ">
+          See Journal Entries with:
+        </h2>
+        {/*<TagsFilter
           entries={entries}
           // onFilterChange={setFilteredEntries}
             ProfileUser={profileUserId}
             allTags={allTags} />
       </section>*/}
 
-          <TagsFilter
+        <TagsFilter
           selectedTag={selectedTag}
           setSelectedTag={setSelectedTag}
           allTags={allTags}
@@ -61,9 +57,8 @@ const UserJournalSection: React.FC<UserJournalSectionProps> = ({
       </section>
       {/* Journal Entries Section */}
       <section className="journal-section">
-
         <NewJournalEntryForm addEntry={handleAddEntry} IsOwner={isOwner} />
-        { hasEntries? (
+        {hasEntries ? (
           <div className="space-y-4 mt-4">
             <JournalEntryList
               entries={entries}
@@ -72,7 +67,6 @@ const UserJournalSection: React.FC<UserJournalSectionProps> = ({
               ownerName={userName}
               onEdit={editEntry} // Pass edit function
               isOwner={isOwner}
-
             />
           </div>
         ) : (

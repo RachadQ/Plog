@@ -1,47 +1,49 @@
-import React, { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useAuth } from "../components/Default/AuthProvider";
-import axios from 'axios';
+import axios from "axios";
 
 const ResetPassword: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
-  const resetToken = searchParams.get('token'); // Extract token from URL
-  const { apiUrl} = useAuth();
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const resetToken = searchParams.get("token"); // Extract token from URL
+  const { apiUrl } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (newPassword !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError("Passwords do not match.");
       return;
     }
 
     try {
-        const response = await axios.post(`${apiUrl}/reset-password`, {
-          token: resetToken,
-          newPassword,
-        });
-        setMessage(response.data.message);
-        setError('');
-      } catch (err) {
-        // Narrowing 'err' to ensure it's an AxiosError
-        if (axios.isAxiosError(err)) {
-          setError(err.response?.data?.message || 'Something went wrong.');
-        } else {
-          setError('An unexpected error occurred.');
-        }
-        setMessage('');
+      const response = await axios.post(`${apiUrl}/reset-password`, {
+        token: resetToken,
+        newPassword,
+      });
+      setMessage(response.data.message);
+      setError("");
+    } catch (err) {
+      // Narrowing 'err' to ensure it's an AxiosError
+      if (axios.isAxiosError(err)) {
+        setError(err.response?.data?.message || "Something went wrong.");
+      } else {
+        setError("An unexpected error occurred.");
       }
+      setMessage("");
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Reset Password</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">
+          Reset Password
+        </h2>
         {message && <p className="text-green-500 mb-4">{message}</p>}
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
