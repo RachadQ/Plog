@@ -25,6 +25,7 @@ const NewJournalEntryForm: React.FC<NewJournalEntryFormProps> = ({
   const [images, setImages] = useState<File[]>([]);
 
   useEffect(() => {
+    if(!authToken) return;
     // Function to fetch user information
     const fetchUserInfo = async () => {
       try {
