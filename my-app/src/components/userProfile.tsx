@@ -9,6 +9,8 @@ import { useAuth } from "../components/Default/AuthProvider";
 import GoogleAd from "./GoogleAd";
 import FileUpload from "./FileUpload";
 import ChatBox from "./ChatBox";
+import AdsterraAd from "./AdsterraAd";
+import AdWrapper from "./AdWrapper";
 
 const UserProfile: React.FC = () => {
   const { username } = useParams<{ username: string }>();
@@ -181,6 +183,17 @@ const UserProfile: React.FC = () => {
       }
     }
   }, [entries, tags]);
+
+  useEffect(() => {
+    setTimeout(() => {
+    requestIdleCallback(() => {
+      setShowAds(true);
+    });
+}, 1500);
+
+
+}, []);
+
   if (error) return <div className="p-6 text-red-500">{error}</div>;
   if (!profile) return <div className="p-6">Loading profile...</div>;
 
@@ -242,7 +255,10 @@ const UserProfile: React.FC = () => {
       </section>
 
       {/*Google ad Section*/}
-      <section className="py-4">{showAds && <GoogleAd />}</section>
+      {/*<section className="py-4">{showAds && <GoogleAd />}</section>*/}
+      <section className="py-4">
+      {showAds &&  <AdWrapper/>}
+    </section>
 
       {/* Journal Entries Section */}
       <section className="py-6 md:py-4 mb-3">
