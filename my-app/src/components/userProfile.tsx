@@ -22,7 +22,7 @@ const UserProfile: React.FC = () => {
     error,
     apiUrl,
   } = useAuth();
-
+  const [showAds, setShowAds] = useState(false);
   const [entries, setEntries] = useState<JournalEntryProp[]>([]);
   const [loading, setLoading] = useState(false);
   const loaderRef = useRef(null);
@@ -231,7 +231,7 @@ const UserProfile: React.FC = () => {
 
       {/*Google ad Section*/}
       <section className="py-4">
-      { /*<GoogleAd />*/}
+      {showAds && <GoogleAd />}
       </section>
 
       {/* Journal Entries Section */}
