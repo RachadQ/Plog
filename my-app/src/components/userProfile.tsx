@@ -161,7 +161,7 @@ const UserProfile: React.FC = () => {
         observer.unobserve(loader);
       }
     };
-  }, [hasMoreEntries, loading]);
+  }, [hasMoreEntries, loading,initialLoadDone]);
 
   useEffect(() => {
     if (!entries || !tags) return;
