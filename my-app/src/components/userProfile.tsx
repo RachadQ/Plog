@@ -136,7 +136,12 @@ const UserProfile: React.FC = () => {
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && hasMoreEntries && !loading) {
+        if (
+          entry.isIntersecting &&
+          hasMoreEntries &&
+          !loading &&
+          initialLoadDone
+        ) {
           setPage((prev) => prev + 1);
         }
       },
