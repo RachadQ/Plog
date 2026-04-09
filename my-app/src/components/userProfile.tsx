@@ -30,6 +30,7 @@ const UserProfile: React.FC = () => {
   const [page, setPage] = useState(1);
   const [tags, setTags] = useState<string[]>([]);
   const [selectedTag, setSelectedTag] = useState<string>("All");
+  const [initialLoadDone, setInitialLoadDone] = useState(false);
   const [filteredEntries, setFilteredEntries] =
     useState<JournalEntryProp[]>(entries);
 
@@ -123,9 +124,12 @@ const UserProfile: React.FC = () => {
   }, [selectedTag]);
 
   useEffect(() => {
-    if (!loading && hasMoreEntries) {
-      fetchEntries();
-    }
+    const load = async () => {
+      await fetchEntries(page);
+      setInitialLoadDone(true);
+    };
+
+    load();
   }, [page]);
 
   /** Infinite Scroll Observer */
@@ -230,9 +234,7 @@ const UserProfile: React.FC = () => {
       </section>
 
       {/*Google ad Section*/}
-      <section className="py-4">
-      {showAds && <GoogleAd />}
-      </section>
+      <section className="py-4">{showAds && <GoogleAd />}</section>
 
       {/* Journal Entries Section */}
       <section className="py-6 md:py-4 mb-3">

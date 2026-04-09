@@ -51,7 +51,6 @@ function App() {
           <Route path="/terms-of-service" element={<TermsOfService />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<ContactForm />} />
-
         </Routes>
       </BaseLayout>
     </div>
