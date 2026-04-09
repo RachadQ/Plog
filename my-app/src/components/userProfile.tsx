@@ -117,20 +117,23 @@ const UserProfile: React.FC = () => {
       setPage(1);
       setHasMoreEntries(true);
       //  fetchEntries(); // force fetch page 1
-      await fetchEntries(1);
+      setInitialLoadDone(false);
+      setLoading(false);
     };
 
     resetAndFetch();
   }, [selectedTag]);
 
   useEffect(() => {
+    if (!hasMoreEntries) return;
+
     const load = async () => {
       await fetchEntries(page);
       setInitialLoadDone(true);
     };
 
     load();
-  }, [page]);
+  }, [page, selectedTag]);
 
   /** Infinite Scroll Observer */
   useEffect(() => {
