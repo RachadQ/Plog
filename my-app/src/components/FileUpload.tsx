@@ -44,6 +44,9 @@ const FileUpload = ({userId,profilePicture}) => {
             )
             console.log( "reached file upload" + response.data);  // Handle response (image uploaded successfully)
             //update profile picture after upload
+
+            setIsOpen(false);
+            setFile(null);
         }
         catch(error)
         {
