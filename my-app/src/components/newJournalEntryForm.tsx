@@ -88,8 +88,7 @@ const NewJournalEntryForm: React.FC<NewJournalEntryFormProps> = ({
 
       const response = await axios.post(`${apiUrl}/entrie`, formData, {
         headers: {
-          Authorization: `Bearer ${authToken}`,
-          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${authToken}`
         },
       });
 
