@@ -30,7 +30,6 @@ const AdsterraDesktop = () => {
     };
   }, []);
 
-   console.log("Desktop AD LOADED");
   return (
     <div
       ref={containerRef}

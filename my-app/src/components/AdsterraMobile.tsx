@@ -27,7 +27,6 @@ const containerRef = useRef<HTMLDivElement | null>(null);
       script.remove();
     };
   }, []);
-  console.log("MOBILE AD LOADED");
 
   return (
     <div
