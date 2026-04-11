@@ -9,6 +9,7 @@ interface UserJournalSectionProps {
   filteredEntries: JournalEntryProp[];
   setFilteredEntries: (entries: JournalEntryProp[]) => void;
   handleAddEntry: (newEntry: JournalEntryProp) => void;
+  refreshEntries: () => Promise<void>;
   authenticatedUserId: string; // New prop for user ID
   deleteEntry: (entryId: string) => void;
   userName: string;
@@ -23,6 +24,7 @@ interface UserJournalSectionProps {
 const UserJournalSection: React.FC<UserJournalSectionProps> = ({
   entries,
   handleAddEntry,
+  refreshEntries,
   authenticatedUserId,
   deleteEntry,
   editEntry,
@@ -57,7 +59,7 @@ const UserJournalSection: React.FC<UserJournalSectionProps> = ({
       </section>
       {/* Journal Entries Section */}
       <section className="journal-section">
-        <NewJournalEntryForm addEntry={handleAddEntry} IsOwner={isOwner} />
+        <NewJournalEntryForm refreshEntries={refreshEntries} IsOwner={isOwner} />
         {hasEntries ? (
           <div className="space-y-4 mt-4">
             <JournalEntryList

@@ -38,7 +38,7 @@ const UserProfile: React.FC = () => {
 
   /** Fetch Profile & Entries */
   const fetchProfile = useCallback(async () => {
-    if (!username || loading || !hasMoreEntries) return;
+    if (!username || !hasMoreEntries) return;
 
     //setLoading(true);
     try {
@@ -65,10 +65,22 @@ const UserProfile: React.FC = () => {
     }
   }, [username]);
 
+  const refreshEntries = async () => {
+    setEntries([]);
+    setHasMoreEntries(true);
+    setInitialLoadDone(false);
+    setSelectedTag("All");
+
+    await fetchEntries(1);
+
+    // reset page AFTER
+    setPage(1);
+  };
+
   /** Fetch Entries with Pagination + Tag */
   const fetchEntries = useCallback(
     async (pageToFetch = page) => {
-      if (!username || loading || !hasMoreEntries) return;
+      if (!username || !hasMoreEntries) return;
 
       setLoading(true);
       try {
@@ -163,7 +175,7 @@ const UserProfile: React.FC = () => {
         observer.unobserve(loader);
       }
     };
-  }, [hasMoreEntries, loading,initialLoadDone]);
+  }, [hasMoreEntries, loading, initialLoadDone]);
 
   useEffect(() => {
     if (!entries || !tags) return;
@@ -186,13 +198,11 @@ const UserProfile: React.FC = () => {
 
   useEffect(() => {
     setTimeout(() => {
-    requestIdleCallback(() => {
-      setShowAds(true);
-    });
-}, 1500);
-
-
-}, []);
+      requestIdleCallback(() => {
+        setShowAds(true);
+      });
+    }, 1500);
+  }, []);
 
   if (error) return <div className="p-6 text-red-500">{error}</div>;
   if (!profile) return <div className="p-6">Loading profile...</div>;
@@ -256,9 +266,7 @@ const UserProfile: React.FC = () => {
 
       {/*Google ad Section*/}
       {/*<section className="py-4">{showAds && <GoogleAd />}</section>*/}
-      <section className="py-4">
-      {showAds &&  <AdWrapper/>}
-    </section>
+      <section className="py-4">{showAds && <AdWrapper />}</section>
 
       {/* Journal Entries Section */}
       <section className="py-6 md:py-4 mb-3">
@@ -267,6 +275,7 @@ const UserProfile: React.FC = () => {
           //filteredEntries={filteredEntries}
           // setFilteredEntries={setFilteredEntries}
           handleAddEntry={handleAddEntry}
+          refreshEntries={refreshEntries}
           authenticatedUserId={loginUserUserId || ""}
           userName={profile.firstName + " " + profile.lastName}
           deleteEntry={deleteEntry}

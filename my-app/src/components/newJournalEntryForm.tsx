@@ -4,13 +4,13 @@ import JournalEntryProp from "../interface/JournalEntryProp";
 import { TagProp } from "../interface/TagProp";
 import { useAuth } from "./Default/AuthProvider";
 interface NewJournalEntryFormProps {
-  addEntry: (newEntry: JournalEntryProp) => void;
+  refreshEntries: () => Promise<void>;
   IsOwner: boolean;
   //refreshProfile:
 }
 
 const NewJournalEntryForm: React.FC<NewJournalEntryFormProps> = ({
-  addEntry,
+  refreshEntries,
   IsOwner /*refreshProfile*/,
 }) => {
   const [title, setTitle] = useState("");
@@ -85,8 +85,8 @@ const NewJournalEntryForm: React.FC<NewJournalEntryFormProps> = ({
       images.forEach((image) => {
         formData.append("images", image);
       });
-
-      const response = await axios.post(`${apiUrl}/api/entrie`, formData, {
+      console.log("API URL:", apiUrl);  
+      const response = await axios.post(`${process.env.REACT_APP_LOCALHOST_URL}/api/entrie`, formData, {
         headers: {
           Authorization: `Bearer ${authToken}`
         },
@@ -94,20 +94,8 @@ const NewJournalEntryForm: React.FC<NewJournalEntryFormProps> = ({
 
       const createdEntry = response.data.entry;
       // Add the new entry to the local state (or any state management you use)
-      addEntry({
-        _id: createdEntry._id, // Assuming backend returns the new entry with _id
-        title: createdEntry.title,
-        content: createdEntry.content,
-        tags: createdEntry.tags.map((tag) => ({
-          _id: tag._id,
-          name: tag.name,
-        })), // Ensure tags are correctly formatted
-        user: loginUserUserId as string,
-        ownerName: name,
-        createdAt: createdEntry.createdAt || new Date().toISOString(), // Use backend timestamp
-        updatedAt: createdEntry.updatedAt || new Date().toISOString(), // Use backend timestamp
-        images: createdEntry.images || [], // Include images from backend response
-      });
+
+      await refreshEntries();
 
       // Reset form fields
       setTitle("");
