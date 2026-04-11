@@ -86,7 +86,7 @@ const NewJournalEntryForm: React.FC<NewJournalEntryFormProps> = ({
         formData.append("images", image);
       });
 
-      const response = await axios.post(`${apiUrl}/entrie`, formData, {
+      const response = await axios.post(`${apiUrl}/api/entrie`, formData, {
         headers: {
           Authorization: `Bearer ${authToken}`
         },
